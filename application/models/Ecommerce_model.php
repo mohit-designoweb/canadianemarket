@@ -1367,6 +1367,25 @@ class Ecommerce_model extends CI_Model {
         $this->db->insert('restaurant_wishlist', $data);
         return 1;
     }
+     public function checkRestaurantMenuWishlist($menu_id, $userid) {
+        $check_query = $this->db->get_where('store_product_wishlist', ['user_id' => $userid, 'menu_id' => $menu_id]);
+        if ($check_query->num_rows() >= 1) {
+            $this->db->delete('store_product_wishlist', ['user_id' => $userid, 'menu_id' => $menu_id]);
+            return $this->db->affected_rows();
+        }
+    }
+
+    public function addRestaurantMenuWishlist($menu_id, $userid) {
+
+        $data = array(
+            'user_id' => $userid,
+            'menu_id' => $menu_id,
+            'date' => date('Y-m-d H:i:s A')
+        );
+        $this->db->insert('store_product_wishlist', $data);
+        return 1;
+    }
+
 
     public function getStoreProductWishlist($product_id, $user_id) {
 

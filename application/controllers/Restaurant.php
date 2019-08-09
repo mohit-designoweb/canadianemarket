@@ -264,6 +264,7 @@ class Restaurant extends CI_Controller {
 
     public function getRestaurantMenu($menu_category_id, $restaurant_id) {
         $this->output->set_content_type('application/json');
+        $data['user_data'] =$user_data= $this->getDataByUniqueId();
         $data['restaurant_id'] = $restaurant_id;
         $data['menus'] = $this->ecommerce_model->getMenuByMenuCategoryId($menu_category_id);
         $content_wrapper = $this->load->view('front/restaurant/menu-wrapper', $data, true);
@@ -715,6 +716,20 @@ class Restaurant extends CI_Controller {
             return FALSE;
         } else {
             $response = $this->ecommerce_model->addRestaurantWishlist($restaurant_id, $user_id);
+            $this->output->set_output(json_encode(['result' => 1]));
+            return FALSE;
+        }
+    }
+    
+    public function restaurantMenuWishlist($menu_id, $user_id)
+    {
+        $this->output->set_content_type('application/json');
+        $checkingResponse = $this->ecommerce_model->checkRestaurantMenuWishlist($menu_id, $user_id);
+        if ($checkingResponse) {
+            $this->output->set_output(json_encode(['result' => 1]));
+            return FALSE;
+        } else {
+            $response = $this->ecommerce_model->addRestaurantmenuWishlist($menu_id, $user_id);
             $this->output->set_output(json_encode(['result' => 1]));
             return FALSE;
         }
