@@ -36,10 +36,10 @@ class Partner extends CI_Controller {
         }
         $result = $this->admin_model->checkLogin('partner');
         if ($result) {
-			if($result['is_active']=="Inactive"){
-				$this->output->set_output(json_encode(['result' => 1, 'url' => base_url('partner/dashboard'), 'msg' => 'Your Account Has Been Deactivated!!']));
-            return FALSE;
-			}
+            if ($result['is_active'] == "Inactive") {
+                $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('partner/dashboard'), 'msg' => 'Your Account Has Been Deactivated!!']));
+                return FALSE;
+            }
             $this->session->set_userdata('is_partner', $this->input->post('partner'));
             $this->session->set_userdata('email_partner', $result['email']);
             $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('partner/dashboard'), 'msg' => 'Loading!! Please Wait']));
@@ -54,6 +54,7 @@ class Partner extends CI_Controller {
         if (!$this->isLogin()) {
             redirect(base_url('partner'));
         }
+        $data['partner_js'] = '1';
         $data['title'] = 'Dashboard';
         $data['user'] = $this->getUserData();
         $this->load->view('admin/commons/header', $data);
@@ -69,6 +70,7 @@ class Partner extends CI_Controller {
         $data['user'] = $this->getUserData();
         $data['title'] = 'Dashboard';
         $data['partner'] = '1';
+        $data['partner_js'] = '1';
         $this->load->view('admin/commons/header', $data);
         $this->load->view('admin/commons/partner-sidebar', $data);
         $this->load->view('admin/change-password');
@@ -101,6 +103,7 @@ class Partner extends CI_Controller {
         $data['is_admin'] = $this->session->userdata('is_admin');
         $data['user'] = $this->getUserData();
         $data['title'] = 'User Profile';
+        $data['partner_js'] = '1';
         $data['country_code'] = $this->admin_model->getCountryCode();
         $this->load->view('admin/commons/header', $data);
         $this->load->view('admin/commons/partner-sidebar', $data);
@@ -133,7 +136,7 @@ class Partner extends CI_Controller {
             $user = $this->admin_model->getUserDetail('partner', $email);
             $image_url = $user['image_url'];
         }
-        $result = $this->admin_model->doUpdateProfile('partner', $email, $image_url);
+        $result = $this->admin_model->doUpdateProfile('partner', $email, $image_url,'');
         if ($result) {
             $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('partner/profile'), 'msg' => 'Profile Updated Succesfully!!']));
             return FALSE;
@@ -165,16 +168,15 @@ class Partner extends CI_Controller {
         $this->session->unset_userdata('is_partner');
         redirect(base_url('partner'));
     }
-	
-    
+
     public function forgot_password() {
-        
+
         $this->load->view('admin/forgot_password_partner');
     }
-    
-    public function forgot_password_checked(){
+
+    public function forgot_password_checked() {
         $this->output->set_content_type('application/json');
-        
+
         $this->form_validation->set_rules('email', 'Register Email', 'trim|required');
         if ($this->form_validation->run() == FALSE) {
             $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
@@ -182,75 +184,72 @@ class Partner extends CI_Controller {
         }
         $result = $this->admin_model->varify_emailid();
 
-        if(!empty($result)){
-		
-		$str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-		$activationcode = substr(str_shuffle($str), 0, 10);	
-		
-        $this->send_forgot_password_link($result,$activationcode);
+        if (!empty($result)) {
+
+            $str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            $activationcode = substr(str_shuffle($str), 0, 10);
+
+            $this->send_forgot_password_link($result, $activationcode);
             $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Link has been sent on your email ', 'url' => base_url('admin/partner/forgot_password')]));
             return FALSE;
-        }
-        else{
+        } else {
             $this->output->set_output(json_encode(['result' => -1, 'errors' => 'This email id does not exist!']));
             return FALSE;
         }
-        
-    }//end of function 
-    
-    public function send_forgot_password_link($result,$activationcode) {
-    //$result = $result;
-	//$str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    //$activationcode = substr(str_shuffle($str), 0, 10);
-	
-	$getEmailResponse = $this->admin_model->insert_partner_activationcode($activationcode,$result);
-	//if($getEmailResponse){	
-	$config = array(
-	'protocol' => 'smtp',
-	'smtp_host' => 'ssl://smtp.googlemail.com',
-	'smtp_port' => 465,
-	'smtp_user' => 'canadianemarket@gmail.com',
-	'smtp_pass' => 'HappyinGod!2017',
-	'mailtype' => 'html',
-	'charset' => 'utf-8'
-	);
-	$this->email->initialize($config);
-	$this->email->set_mailtype("html");
-	$this->email->set_newline("\r\n");
+    }
 
-	//Email content
-	$htmlContent = "<h3>Dear ".$result['first_name'].",</h3>";
-	$htmlContent.="<div style='padding-top:8px;'>Please click The following link For Update your password..</div>";
-	$htmlContent.= base_url('partner/password-reset/'.$result['partner_id'].'/'.$activationcode)." Click Here!! Set new password!";
-	
-	$this->email->to($result['email']);
-	$this->email->from('canadianemarket@gmail.com','MyWebsite');
-	$this->email->subject('Hey!, '.$result['first_name']." ".$result['last_name'].' your reset password link');
-	$this->email->message($htmlContent);
+//end of function 
 
-	//Send email
-	$this->email->send();
-		
-		return true;
-		}
-		
-	public function password_reset($partner_id,$activationcode){
-		$data['partner_id'] = $partner_id;
-		$checkResponse = $this->admin_model->update_partner_email_status($partner_id,$activationcode);
-		
-		if($checkResponse){
-			$this->load->view('admin/partner_reset_password',$data);
-			
-		}else{
-			echo "This is the Wrong or Expire Activation Code";
-		}
-		
-	
-	}
-		
-	public function update_forgot_password(){
+    public function send_forgot_password_link($result, $activationcode) {
+        //$result = $result;
+        //$str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        //$activationcode = substr(str_shuffle($str), 0, 10);
+
+        $getEmailResponse = $this->admin_model->insert_partner_activationcode($activationcode, $result);
+        //if($getEmailResponse){	
+        $config = array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'canadianemarket@gmail.com',
+            'smtp_pass' => 'HappyinGod!2017',
+            'mailtype' => 'html',
+            'charset' => 'utf-8'
+        );
+        $this->email->initialize($config);
+        $this->email->set_mailtype("html");
+        $this->email->set_newline("\r\n");
+
+        //Email content
+        $htmlContent = "<h3>Dear " . $result['first_name'] . ",</h3>";
+        $htmlContent .= "<div style='padding-top:8px;'>Please click The following link For Update your password..</div>";
+        $htmlContent .= base_url('partner/password-reset/' . $result['partner_id'] . '/' . $activationcode) . " Click Here!! Set new password!";
+
+        $this->email->to($result['email']);
+        $this->email->from('canadianemarket@gmail.com', 'MyWebsite');
+        $this->email->subject('Hey!, ' . $result['first_name'] . " " . $result['last_name'] . ' your reset password link');
+        $this->email->message($htmlContent);
+
+        //Send email
+        $this->email->send();
+
+        return true;
+    }
+
+    public function password_reset($partner_id, $activationcode) {
+        $data['partner_id'] = $partner_id;
+        $checkResponse = $this->admin_model->update_partner_email_status($partner_id, $activationcode);
+
+        if ($checkResponse) {
+            $this->load->view('admin/partner_reset_password', $data);
+        } else {
+            echo "This is the Wrong or Expire Activation Code";
+        }
+    }
+
+    public function update_forgot_password() {
         $this->output->set_content_type('application/json');
-        
+
         $this->form_validation->set_rules('new_password', 'New Password', 'required');
         $this->form_validation->set_rules('conf_password', 'Confirm Password', 'required|matches[new_password]');
         if ($this->form_validation->run() === FALSE) {
@@ -265,10 +264,6 @@ class Partner extends CI_Controller {
             $this->output->set_output(json_encode(['result' => -1, 'msg' => 'Password is not correct']));
             return FALSE;
         }
-        
-    }	
-	
-
-	
+    }
 
 }
