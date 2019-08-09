@@ -510,6 +510,12 @@ $route['partnerOrder/store-order'] = 'admin/partnerOrder/store-order';
 $route['partnerOrder/get-partner-store-order-wrapper'] = 'admin/partnerOrder/get-partner-store-order-wrapper';
 $route['partnerOrder/viewStoreOrderDetail/(:any)'] = 'admin/partnerOrder/viewStoreOrderDetail/$1';
 
+$route['partnerOrder/order-cancel-reason/(:any)'] = 'admin/partnerOrder/order-cancel-reason/$1';
+$route['partnerOrder/order-prepared-time/(:any)'] = 'admin/partnerOrder/order-prepared-time/$1';
+$route['partnerOrder/store-order'] = 'admin/partnerOrder/store-order';
+$route['partnerOrder/get-partner-store-order-wrapper'] = 'admin/partnerOrder/get-partner-store-order-wrapper';
+$route['partnerOrder/viewStoreOrderDetail/(:any)'] = 'admin/partnerOrder/viewStoreOrderDetail/$1';
+
 
 // Courier Order Management
 $route['admin/courier'] = 'admin/courier';
@@ -526,6 +532,11 @@ $route['courier/updateOrderReceivedStatus/(:any)/(:any)'] ='admin/courier/update
 $route['courier/get-notification'] ='admin/courier/get-notification';
 $route['courier/get-courier-wrapper/(:any)'] ='admin/courier/get-courier-wrapper/$1';
 $route['courier/check-for-accept-order/(:any)'] ='admin/courier/check-for-accept-order/$1';
+$route['courier/getAddress/(:any)'] = 'admin/courier/getAddress/$1';
+$route['courier/getRestaurantAddress/(:any)'] = 'admin/courier/getRestaurantAddress/$1';
+$route['courier/getuserAddress/(:any)'] = 'admin/courier/getuserAddress/$1';
+$route['courier/orderDelivered/(:any)'] = 'admin/courier/orderDelivered/$1';
+$route['admin/search-for-order'] = 'admin/courier/search-for-order';
 
 //Admin restaurant Order Management
 $route['admin/restaurant-orders'] = 'admin/admin/restaurant-orders';

@@ -1,3 +1,144 @@
+<input type="hidden" id="base-url1" value="<?php echo base_url('admin');?>">
+<div id="order-cancel-reason" class="modal fade register" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+              <button type="button" class="btnclose" data-dismiss="modal"><img src="<?php echo base_url('assets/img/cross2.png'); ?>" alt="cross2" class="img-responsive center-block"></button>
+                <div class="register_inner modalflex">
+                    <div class="row">
+                        <div class="col-12">
+                            <form method="post" name="common-form" id="common-form" action="<?php echo base_url('partnerOrder/order-cancel-reason/'.$order_detail1['order_id']); ?>">
+                                <div class="row form-group">
+                                    <div class="col-10 offset-2">
+                                        <h5>ENTER REASON TO CANCEL ORDER</h5>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <p id="error_msg"></p>
+                                    <div class="col-2"><label>Reason:</label></div>
+                                    <div class="col-10">
+                                        <textarea name="order-cancel" rows="10" cols="50" id="order-cancel" name="order-cancel" placeholder="Give Reason To Reject Order"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-3 offset-8">
+                                        <button class="btn btn-primary pull-right" type="submit" name="otpBtn">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="order-deliver-time" class="modal fade register" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+              <button type="button" class="btnclose" data-dismiss="modal"><img src="<?php echo base_url('assets/img/cross2.png'); ?>" alt="cross2" class="img-responsive center-block"></button>
+                <div class="register_inner modalflex">
+                    <div class="row">
+                        <div class="col-12">
+                            <form method="post" name="order-prepare-time" id="order-prepare-time" action="<?php echo base_url('partnerOrder/order-prepared-time/'.$order_detail1['order_id']); ?>">
+                                <div class="row form-group">
+                                    <div class="col-10 offset-2">
+                                        <h5>ENTER ORDER PREPARED TIME</h5>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <p id="error_msg"></p>
+                                    <div class="col-2"><label>Time:</label></div>
+                                    <div class="col-10">
+                                        <input type="time" name="order-time" id="order-time">
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-3 offset-8">
+                                        <button class="btn btn-primary pull-right" type="submit" name="orderPrepTime" id="orderPrepTime">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="search-order" class="modal fade register" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" id="user-address-div">
+        <!-- Modal content-->
+    <div class="modal-content newOffer">
+            <div class="modal-body">
+            <button type="button" class="btnclose" data-dismiss="modal"><img src="<?php echo base_url('assets/img/cross2.png'); ?>" alt="cross2" class="img-responsive center-block"></button>
+                <div class="register_inner modalflex">
+                    <div class="row">
+                        <div class="col-12">
+                            <form method="post" name="order-prepare-time" id="order-prepare-time" action="<?php echo base_url('partnerOrder/order-prepared-time/'.$order_detail1['order_id']); ?>">
+                                <div class="row form-group">
+                                    <div class="col-8">
+                                        <h5>Matching You To Orders</h5>
+                                        <h6>Searching...</h6>
+                                    </div>
+                                    
+                                </div>
+                           
+                               <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group" id="map">
+
+                                    </div>
+                                </div>
+                            </div>
+                               
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+</div>
+<div id="drag-path" class="modal fade register" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" id="user-address-div">
+        <!-- Modal content-->
+    <div class="modal-content newOffer">
+            <div class="modal-body">
+            <button type="button" class="btnclose" data-dismiss="modal"><img src="<?php echo base_url('assets/img/cross2.png'); ?>" alt="cross2" class="img-responsive center-block"></button>
+                <div class="register_inner modalflex">
+                    <div class="row">
+                        <div class="col-12">
+                            <form method="post" name="order-prepare-time" id="order-prepare-time" action="<?php echo base_url('partnerOrder/order-prepared-time/'.$order_detail1['order_id']); ?>">
+                                <div class="row form-group">
+                                    <div class="col-8">
+                                        <h5>Matching You To Orders</h5>
+                                    </div>
+                                </div>
+                               <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group" id="map">
+
+                                    </div>
+                                </div>
+                            </div>
+                               
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+</div>
+
 <script src='<?php echo base_url('public/js/pace.min.js') ?>'></script>
 <script src='<?php echo base_url('public/js/demo.js') ?>'></script>
 

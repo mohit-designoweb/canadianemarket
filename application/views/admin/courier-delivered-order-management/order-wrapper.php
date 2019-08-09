@@ -38,7 +38,7 @@
                                 <td><?php echo $i; ?></td>
                                 <td><?php echo $order['restaurant_name']; ?></td>
                                 <td><?php echo $order['first_name']." ".$order['last_name']; ?></td>
-                                <td> <a href=""  name="path" id="path"  data-url="<?php echo base_url('admin/courier/getletlng');?>"><?php echo $order['address']." ".$order['address2'] ; ?></a></td>
+                                <td><?php echo $order['address']." ".$order['address2'] ; ?></td>
                                 <td><?php echo number_format($order['total_amount'],2); ?></td>
                                 <td><?php echo $order['order_date']; ?></td>
                                 <td><?php echo $order['order_time']; ?></td>
@@ -52,7 +52,7 @@
                                         <?php } if($order['order_status']=="Delivered"){?>
                                      <a href="" class="btn btn-success btn-sm">Order Delivered</a>       
                                             <?php }if($order['order_status']=="Processing") {?>
-                                    <!--<a href="<?php //echo base_url('courier/courierOrderDetail/' . $order['order_id']); ?>" data-toggle="tooltip" data-placement="top" title="View Order Detail" class="btn btn-success btn-sm">Accept<i class="fe fe-check"></i></a>-->
+                                    <!--<a href="<?php echo base_url('courier/courierOrderDetail/' . $order['order_id']); ?>" data-toggle="tooltip" data-placement="top" title="View Order Detail" class="btn btn-success btn-sm">Accept<i class="fe fe-check"></i></a>-->
                                     
                                     <a href="" class="btn btn-info btn-sm" id="address-detail" data-toggle="modal" data-target="#order-address-detail" data-url="<?php echo base_url('courier/getAddress/'.$order['order_id']);?>">View Details <i class="fe fe-eye"></i></a>
                                     <?php }?>

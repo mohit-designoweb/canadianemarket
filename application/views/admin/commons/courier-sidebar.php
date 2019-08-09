@@ -11,16 +11,36 @@
                 </span>
             </a>
         </li>
-	<li class="menu-item <?php if($title=='Courier Order'){ echo 'active'; } ?>">
-            <a href='<?php echo base_url('courier/view-order'); ?>' class=' menu-link'>
+        <li class="menu-item <?php if($title=='Search For New Order'){ echo 'active'; } ?>">
+            <a href='' id="" data-toggle="modal" data-target="#search-order" class=' menu-link'>
                 <span class="menu-label">
-                    <span class="menu-name">Orders</span>
+                    <span class="menu-name">Search For New Order</span>
                 </span>
                 <span class="menu-icon">
                     <i class="icon-placeholder mdi mdi-checkbox-multiple-marked-circle "></i>
                 </span>
             </a>
         </li>
+	<li class="menu-item <?php if($title=='Courier Order'){ echo 'active'; } ?>">
+            <a href='<?php echo base_url('courier/view-order'); ?>' class=' menu-link'>
+                <span class="menu-label">
+                    <span class="menu-name">New Orders</span>
+                </span>
+                <span class="menu-icon">
+                    <i class="icon-placeholder mdi mdi-checkbox-multiple-marked-circle "></i>
+                </span>
+            </a>
+        </li>
+        <!--<li class="menu-item <?php if($title=='Courier Delivered Order'){ echo 'active'; } ?>">
+            <a href='<?php echo base_url('courier/view-delivered-order'); ?>' class=' menu-link'>
+                <span class="menu-label">
+                    <span class="menu-name">Delivered Orders</span>
+                </span>
+                <span class="menu-icon">
+                    <i class="icon-placeholder mdi mdi-checkbox-multiple-marked-circle "></i>
+                </span>
+            </a>
+        </li>-->
         
     </ul>
 

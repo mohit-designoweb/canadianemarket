@@ -5,7 +5,7 @@ foreach ($menus as $menu) {
     <div class="cart_items boxs">
         <form method="post" action="<?php echo base_url('restaurant/addToCartMenu'); ?>" class="add-to-cart">
             <div class="item_img">
-                <i class="fa fa-heart"></i>
+                <a > <i class="fa fa-heart hrt_img"></i></a>
                 <img src="<?php echo base_url('uploads/menu/' . $menu['image_url']); ?>" alt="itemimg" class="img-responsive">
             </div>
             <div class="item_details itemDet">
@@ -14,7 +14,7 @@ foreach ($menus as $menu) {
                 <input type="hidden" name="name" value="<?php echo str_replace(' ', '_', $menu['menu_name']); ?>"/>
                 <input type="hidden" name="size" value="size"/>
                 <input type="hidden" name="restaurant_id" value="<?php echo $restaurant_id; ?>"/>
-				<input type="hidden" name="module" value="restaurant"/> 
+	        <input type="hidden" name="module" value="restaurant"/> 
 
                 <div class="id_lft restFood boxs">
                     <h5><?php echo $menu['menu_name']; ?></h5>
