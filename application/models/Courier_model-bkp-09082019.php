@@ -22,24 +22,23 @@ class Courier_model extends CI_Model {
         return $query->row_array();
     }
     
-    public function doAddCourier($password, $image_url) {
+    public function doAddCourier($image_url) {
         $password = $this->security->xss_clean(hash('sha256', $password));
         $data = array(
             'first_name' => $this->security->xss_clean($this->input->post('first_name')),
             'last_name' => $this->security->xss_clean($this->input->post('last_name')),
             'email' => $this->security->xss_clean($this->input->post('email')),
             'image_url' => $image_url,
-            'password' => $password,
+            'password' =>$this->security->xss_clean(hash('sha256',$this->input->post('password'))),
             'address1' => $this->security->xss_clean($this->input->post('store_address1')),
             'address2' => $this->security->xss_clean($this->input->post('store_address2')),
             'city' => $this->security->xss_clean($this->input->post('city')),
             'state' => $this->security->xss_clean($this->input->post('state')),
             'zipcode' => $this->security->xss_clean($this->input->post('zipcode')),
             'country' => $this->security->xss_clean($this->input->post('country')),
-            'phone' => $this->security->xss_clean($this->input->post('phone_no'))
+            'phone' => $this->security->xss_clean($this->input->post('phone_no')),
         );
         $this->db->insert('courier', $data);
-        
         return $this->db->insert_id();
     }
     
@@ -55,10 +54,8 @@ class Courier_model extends CI_Model {
             'state' => $this->security->xss_clean($this->input->post('state')),
             'zipcode' => $this->security->xss_clean($this->input->post('zipcode')),
             'country' => $this->security->xss_clean($this->input->post('country')),
-            'phone' => $this->security->xss_clean($this->input->post('phone_no')),
-            
+            'phone' => $this->security->xss_clean($this->input->post('phone_no'))
         );
-      
         $this->db->update('courier', $data, ['courier_id' => $id]);
         return $this->db->affected_rows();
     }
@@ -100,7 +97,7 @@ class Courier_model extends CI_Model {
 
     public function getRestaurantOrderDetail($id) {
         $this->db->select('restaurant_order_id,status');
-        $result = $this->db->get_where('courier_order_mapping', ['courier_id' => $id]);
+        $result = $this->db->get_where('courier_order_mapping', ['courier_id' => $id,'rejected_by_courier'=>'No']);
         return $result->result_array();
     }
 
@@ -111,13 +108,11 @@ class Courier_model extends CI_Model {
     }
 
     public function getRestaurantUserDetail($order_id) {
-        $this->db->select('r.restaurant_name,r.address as rest_address,ro.order_id,ro.order_date,ro.order_time,ro.total_amount,ro.order_status,rod.sub_total,com.courier_order_mapping_id,com.order_date,com.order_time,com.status,a.first_name,'
-                . 'a.last_name,a.address,a.address2');
+        $this->db->select('r.restaurant_name,ro.order_id,ro.order_date,ro.order_time,ro.total_amount,rod.sub_total,com.courier_order_mapping_id,com.order_date,com.order_time,com.status');
         $this->db->from('restaurant_orders ro');
         $this->db->join('restaurant r', 'ro.restaurant_id=r.restaurant_id');
         $this->db->join('restaurant_order_details rod', 'ro.unique_order_id=rod.unique_order_id');
         $this->db->join('courier_order_mapping com', 'com.restaurant_order_id=ro.order_id');
-        $this->db->join('address a','ro.user_id=a.user_id');
         $this->db->where('ro.order_id', $order_id['restaurant_order_id']);
         $this->db->group_by('r.restaurant_id');
         $result = $this->db->get();
@@ -193,16 +188,12 @@ class Courier_model extends CI_Model {
         return $this->db->affected_rows();
     }
 
-    public function updateOrderStatusInRestaurant($order_id,$status) {
-        $this->db->update('restaurant_orders', ['order_status' => $status], ['order_id' => $order_id]);
+    public function updateOrderStatusInRestaurant($order_id) {
+        $this->db->update('restaurant_orders', ['order_status' => 'Delivered'], ['order_id' => $order_id]);
         return $this->db->affected_rows();
     }
 
-//    public function restaurantOrderAcceptedStatus($restaurant_order_id, $status, $courier_id) {
-//        $this->db->update('restaurant_orders', ['order_status' => $status, 'courier_id' => $courier_id], ['order_id' => $restaurant_order_id]);
-//        return $this->db->affected_rows();
-//    }
-     public function insertCourierIdInRestarantorder($restaurant_order_id, $courier_id) {
+    public function restaurantOrderAcceptedStatus($restaurant_order_id, $status, $courier_id) {
         $this->db->update('restaurant_orders', ['order_status' => $status, 'courier_id' => $courier_id], ['order_id' => $restaurant_order_id]);
         return $this->db->affected_rows();
     }
@@ -223,25 +214,14 @@ class Courier_model extends CI_Model {
         $query=$this->db->get_where('restaurant_orders',['order_id'=>$order_id,'order_status'=>'OutForDelivery']);
         return $query->row_array();
     }
-    ////Manish's Functions
-    public function getOrderAddressById($id)
-    {
-        $this->db->select('r.address as restaurant_address,ro.order_id,ro.order_type,ro.total_amount,rod.tip,a.address,a.address2');
-        $this->db->from('restaurant_orders ro');
-        $this->db->join('restaurant r','ro.restaurant_id=r.restaurant_id');
-        $this->db->join('address a','ro.user_id=a.user_id');
-        $this->db->join('restaurant_order_details as rod','ro.unique_order_id=rod.unique_order_id');
-        $this->db->where('ro.order_id',$id);
-        $query = $this->db->get();
-        return $query->row_array();
-    }
-    
-    public function doUpdateCourierPassword($courierId){
+    //password change function
+     public function doUpdateCourierPassword($courierId){
         $data = array(
         'password' => $this->security->xss_clean(hash('sha256',$this->input->post('password')))
         );
         $this->db->update('courier', $data, ['courier_id' => $courierId]);
         return $this->db->affected_rows();
     }
+    
     
 }

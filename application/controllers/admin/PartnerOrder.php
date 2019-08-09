@@ -134,6 +134,36 @@ class PartnerOrder extends CI_Controller {
 //        $this->session->set_userdata('order_Detail', $order_detail);
 //        return $order_detail;
 //    }
+ public function order_cancel_reason($order_id)
+    {
+        $this->output->set_content_type('application/json');
+        $this->form_validation->set_rules('order-cancel','Order Cancel Reason','required');
+        
+        if($this->form_validation->run() === FALSE)
+        {
+            echo "hello1"; die;
+            $this->output->set_output(json_encode(['result'=>0,'errors'=>$this->form_valiation->errors_array()]));
+            return FALSE;
+        }
+        $this->partner_model->updateOrderStatus('Rejected',$order_id);
+        $result = $this->partner_model->insertOrderCancelReason($order_id);
+        $this->output->set_output(json_encode(['result'=>1,'url'=> base_url('admin/partnerOrder')]));
+        return FALSE;
+    }
+    public function order_prepared_time($order_id)
+    {
+        $this->output->set_content_type('application/json');
+        $this->form_validation->set_rules('order-time','Order Time','required');
+        if($this->form_validation->run() === FALSE)
+        {
+            $this->output->set_output(json_encode(['result'=>0,'errors'=>$this->form_valiation->errors_array()]));
+            return FALSE;
+        }
+        $this->partner_model->updateOrderStatus('Accepted',$order_id);
+        $result = $this->partner_model->insertOrderPreparedTime($order_id);
+        $this->output->set_output(json_encode(['result'=>1,'url'=> base_url('admin/partnerOrder')]));
+        return FALSE;
+    }
 
      public function viewOrderDetail($id, $restaurant_id = NULL) {
         if (!empty($restaurant_id)) {
@@ -161,7 +191,7 @@ class PartnerOrder extends CI_Controller {
         $this->load->view('admin/commons/footer');
     }
 
-    public function getCourierStatusWrapper($id) {
+    /*public function getCourierStatusWrapper($id) {
         $this->output->set_content_type('application/json');
         $data['order_detail'] = $order_detail = $this->partner_model->getOrderDetailById($id);
         $data['order_id'] = $id;
@@ -181,6 +211,37 @@ class PartnerOrder extends CI_Controller {
             $this->output->set_output(json_encode(['result' => 1, 'courier_wrapper' => $courier_wrapper]));
             return false;
         }
+        if ($order_detail['order_status'] == "OutForDelivery") {
+            $courier_wrapper = $this->load->view('admin/partner-order-management/includes/courier-out-for-delivery-wrapper', $data, true);
+            $this->output->set_output(json_encode(['result' => 1, 'courier_wrapper' => $courier_wrapper]));
+            return false;
+        }
+    }*/
+	public function getCourierStatusWrapper($id) {
+        $this->output->set_content_type('application/json');
+        $data['order_detail'] = $order_detail = $this->partner_model->getOrderDetailById($id);
+        $data['order_id'] = $id;
+        if ($order_detail['order_status'] == "Processing") {
+            $courier_wrapper = $this->load->view('admin/partner-order-management/includes/courier-processing-wrapper', $data, true);
+            $this->output->set_output(json_encode(['result' => 1, 'courier_wrapper' => $courier_wrapper]));
+            return false;
+        }
+        if ($order_detail['order_status'] == "Dispatched") {
+            $data['couriers'] = $this->getAllActiveCourier();
+            $courier_wrapper = $this->load->view('admin/partner-order-management/includes/courier-dispatched-wrapper', $data, true);
+            $this->output->set_output(json_encode(['result' => 1, 'courier_wrapper' => $courier_wrapper]));
+            return false;
+        }
+        if ($order_detail['order_status'] == "Accepted") {
+            $courier_wrapper = $this->load->view('admin/partner-order-management/includes/order-time-countdown', $data, true);
+            $this->output->set_output(json_encode(['result' => 1, 'courier_wrapper' => $courier_wrapper]));
+            return false;
+        }
+//        if ($order_detail['order_status'] == "Rejected") {
+//            $courier_wrapper = $this->load->view('admin/partner-order-management/includes/courier-dispatched-wrapper', $data, true);
+//            $this->output->set_output(json_encode(['result' => 1, 'courier_wrapper' => $courier_wrapper]));
+//            return false;
+//        }
         if ($order_detail['order_status'] == "OutForDelivery") {
             $courier_wrapper = $this->load->view('admin/partner-order-management/includes/courier-out-for-delivery-wrapper', $data, true);
             $this->output->set_output(json_encode(['result' => 1, 'courier_wrapper' => $courier_wrapper]));
@@ -254,6 +315,14 @@ class PartnerOrder extends CI_Controller {
         $courier_wrapper = $this->load->view('admin/partner-order-management/includes/courier-out-for-delivery-wrapper', $data, true);
         $this->output->set_output(json_encode(['result' => 1, 'courier_wrapper' => $courier_wrapper]));
         return false;
+    }
+	 public function orderAddress($id){
+        $this->output->set_content_type('application/json');
+        $data['order_id'] = $id;
+        $data['address'] = $this->partner_model->getOrderAddressById($id);
+        $content_wrapper = $this->load->view('admin/courier-order-management/includes/address-wrapper', $data, true);
+        $this->output->set_output(json_encode(['result'=>1,'content_wrapper' => $content_wrapper]));
+        return FALSE;
     }
      public function store_order()
     {

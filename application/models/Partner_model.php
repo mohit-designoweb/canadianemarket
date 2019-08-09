@@ -455,6 +455,22 @@ class Partner_model extends CI_Model {
         $this->db->update('restaurant_orders', ['order_status' => 'OutForDelivery'], ['order_id' => $order_id]);
         return $this->db->affected_rows();
     }
+	 public function insertOrderCancelReason($id)
+    { 
+        $data = array(
+            'order_cancel_reason' => $this->input->post('order-cancel')
+        );
+        $query = $this->db->update('restaurant_orders',$data,['order_id'=>$id]);
+        return $this->db->affected_rows();
+    }
+    public function insertOrderPreparedTime($id)
+    { 
+        $data = array(
+            'order_prepared_time' => $this->input->post('order-time')
+        );
+        $query = $this->db->update('restaurant_orders',$data,['order_id'=>$id]);
+        return $this->db->affected_rows();
+    }
     /// Mohit function start////
     
     public function checkForCourierConfirmation($order_id){

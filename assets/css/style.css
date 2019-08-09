@@ -1829,6 +1829,14 @@ a.basket::before {
 .cart_lft {
     padding: 30px 40px 40px;
 }
+.item_img{
+    position:relative;
+}
+.hrt_img{
+        position: absolute;
+    top: 10px;
+    right: 11px;
+}
 
 .cart_items .item_img {
     width: 20%;

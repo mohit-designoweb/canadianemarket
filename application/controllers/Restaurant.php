@@ -248,9 +248,9 @@ class Restaurant extends CI_Controller {
             $restaurant['distance'] = round($this->distance($latitude, $longitude, $restaurant['latitude'], $restaurant['longitude'], "K"), 1);
         }
         
-		$data['user_data'] =$user_data= $this->getDataByUniqueId();
+	$data['user_data'] =$user_data= $this->getDataByUniqueId();
         $data['wishlist'] = $this->ecommerce_model->getRestaurantWishlist($restaurant['restaurant_id'],$user_data['user_id']);
-		$data['countries'] = $this->getFilterCountry();
+	$data['countries'] = $this->getFilterCountry();
         $data['restaurant'] = $restaurant;
         $data['special_menus'] = $this->ecommerce_model->getSpecialRestaurantMenu($restaurant['restaurant_id']);
         $data['restaurant_menus'] = $this->ecommerce_model->getRestaurantMenuByRestaurantId($restaurant['restaurant_id']);

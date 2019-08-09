@@ -22,7 +22,6 @@ class Courier extends CI_Controller {
         $data['user'] = $this->getUserData();
         $data['is_courier'] = $this->session->userdata('is_courier');
         $restaurant_order_id = $data['restaurant_order_id'] = $this->courier_model->getRestaurantOrderDetail($data['user']['courier_id']);
-
         $i = 0;
         $getRestaurantUserDetail = [];
         foreach ($restaurant_order_id as $order_id) {
@@ -123,7 +122,7 @@ class Courier extends CI_Controller {
     public function doUpdateProfile() {
         $this->output->set_content_type('application/json');
         $this->form_validation->set_rules('first_name', 'First Name', 'required');
-        $this->form_validation->set_rules('last_name', 'Last Name', 'required');
+        $this->form_validation->set_rules('last_name', 'First Name', 'required');
         $this->form_validation->set_rules('address1', 'Address', 'required');
         $this->form_validation->set_rules('address2', 'Address', 'required');
         $this->form_validation->set_rules('city', 'City', 'required');
@@ -214,6 +213,7 @@ class Courier extends CI_Controller {
         $restaurant_order = $data['restaurant_order_id'] = $this->courier_model->getSingleRestaurantOrderDetail($data['user']['courier_id']);
         $data['order_detail'] = $order_detail = $this->courier_model->getSingleRestaurantUserDetail($restaurant_order['restaurant_order_id']);
         if (!empty($order_detail)) {
+//            print_r($order_detail);
             if ($order_detail['status'] == 0) {
                 $notification_wrapper = $this->load->view('admin/commons/includes/get-notification', $data, true);
                 $this->output->set_output(json_encode(['result' => 1, 'notification_wrapper' => $notification_wrapper]));
@@ -314,24 +314,24 @@ class Courier extends CI_Controller {
         }
     }
 
-//    public function updateCourierAvailableStatus($mapping_id, $restaurant_order_id, $status) {
-//        $this->output->set_content_type('application/json');
-//        $courier = $this->getUserData();
-//        if ($status == 'Accepted') {
-//            $data['order_id']=$restaurant_order_id;
-//            $this->courier_model->updateOrderAcceptedStatus($mapping_id, 'Yes');
-//            $this->courier_model->restaurantOrderAcceptedStatus($restaurant_order_id, 'Accepted', $courier['courier_id']);
-//            $this->courier_model->updateCourierAvailableStatus($courier['courier_id'], 'No');
-//            $courier_order_wrapper = $this->load->view('admin/courier-order-management/includes/courier-waiting-wrapper',$data, TRUE);
-//            $this->output->set_output(json_encode(['result' => 1,'courier_order_wrapper'=>$courier_order_wrapper]));
-//            return FALSE;
-//        } else if ($status == 'Rejected') {
-//            $this->courier_model->restaurantOrderAcceptedStatus($restaurant_order_id, 'Rejected', $courier['courier_id']);
-//            $this->courier_model->orderRejectedByCourier($mapping_id);
-//            $this->output->set_output(json_encode(['result' => -1, 'url' => base_url('courier/view-order')]));
-//            return FALSE;
-//        }
-//    }
+    public function updateCourierAvailableStatus($mapping_id, $restaurant_order_id, $status) {
+        $this->output->set_content_type('application/json');
+        $courier = $this->getUserData();
+        if ($status == 'Accepted') {
+            $data['order_id'] = $restaurant_order_id;
+            $this->courier_model->updateOrderAcceptedStatus($mapping_id, 'Yes');
+            $this->courier_model->restaurantOrderAcceptedStatus($restaurant_order_id, 'Accepted', $courier['courier_id']);
+            $this->courier_model->updateCourierAvailableStatus($courier['courier_id'], 'No');
+            $courier_order_wrapper = $this->load->view('admin/courier-order-management/includes/courier-waiting-wrapper', $data, TRUE);
+            $this->output->set_output(json_encode(['result' => 1, 'courier_order_wrapper' => $courier_order_wrapper]));
+            return FALSE;
+        } else if ($status == 'Rejected') {
+            $this->courier_model->restaurantOrderAcceptedStatus($restaurant_order_id, 'Rejected', $courier['courier_id']);
+            $this->courier_model->orderRejectedByCourier($mapping_id);
+            $this->output->set_output(json_encode(['result' => -1, 'url' => base_url('courier/view-order')]));
+            return FALSE;
+        }
+    }
 
     public function check_for_accept_order($order_id) {
         $this->output->set_content_type('application/json');
@@ -364,7 +364,7 @@ class Courier extends CI_Controller {
         $this->output->set_content_type('application/json');
         $data['courier'] = $this->getUserData();
         $status = "Yes";
-        //$result = $this->courier_model->updateOrderStatusInRestaurant($order_id);
+        $result = $this->courier_model->updateOrderStatusInRestaurant($order_id);
         $result = $this->courier_model->updateCourierAvailableStatus($data['courier']['courier_id'], $status);
         $result = $this->courier_model->updateCourierDeliveryStatus($id);
         $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('courier/view-order')]));
@@ -372,6 +372,7 @@ class Courier extends CI_Controller {
     }
 
     public function forgot_password() {
+
         $this->load->view('admin/forgot_password_courier');
     }
 
@@ -402,7 +403,12 @@ class Courier extends CI_Controller {
 //end of function 
 
     public function send_forgot_password_link($result, $activationcode) {
+        //$result = $result;
+        //$str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        //$activationcode = substr(str_shuffle($str), 0, 10);
+
         $getEmailResponse = $this->admin_model->insert_courier_activationcode($activationcode, $result);
+        //if($getEmailResponse){	
         $config = array(
             'protocol' => 'smtp',
             'smtp_host' => 'ssl://smtp.googlemail.com',
@@ -418,8 +424,8 @@ class Courier extends CI_Controller {
 
         //Email content
         $htmlContent = "<h3>Dear " . $result['first_name'] . ",</h3>";
-        $htmlContent.="<div style='padding-top:8px;'>Please click The following link For Update your password..</div>";
-        $htmlContent.= base_url('courier/password-reset/' . $result['courier_id'] . '/' . $activationcode) . " Click Here!! Set new password!";
+        $htmlContent .= "<div style='padding-top:8px;'>Please click The following link For Update your password..</div>";
+        $htmlContent .= base_url('courier/password-reset/' . $result['courier_id'] . '/' . $activationcode) . " Click Here!! Set new password!";
 
         $this->email->to($result['email']);
         $this->email->from('canadianemarket@gmail.com', 'MyWebsite');
@@ -462,87 +468,6 @@ class Courier extends CI_Controller {
             $this->output->set_output(json_encode(['result' => -1, 'msg' => 'Password is not correct']));
             return FALSE;
         }
-    }
-
-    public function cancelRestaurantOrder() {
-        $this->output->set_content_type('application/json');
-        $data['courier'] = $this->getUserData();
-    }
-
-    public function getAddress($order_id) {
-        $this->output->set_content_type('application/json');
-        $data['address'] = $this->courier_model->getOrderAddressById($order_id);
-        $content_wrapper = $this->load->view('admin/courier-order-management/includes/address-wrapper', $data, true);
-        $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
-        return FALSE;
-    }
-
-    public function getRestaurantAddress($id) {
-        $this->output->set_content_type('application/json');
-        $courier_detail = $this->getUserData();
-        $this->courier_model->insertCourierIdInRestarantorder($id, $courier_detail['courier_id']);
-        $this->courier_model->updateOrderStatusInRestaurant($id, "AcceptedByCourier");
-        $data['address'] = $this->courier_model->getOrderAddressById($id);
-        $content_wrapper = $this->load->view('admin/courier-order-management/includes/restaurant-address-wrapper', $data, true);
-        $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
-        return FALSE;
-    }
-
-    public function getuserAddress($id) {
-        $this->output->set_content_type('application/json');
-        $this->courier_model->updateOrderStatusInRestaurant($id, "OrderFulfilled");
-        $data['address'] = $this->courier_model->getOrderAddressById($id);
-        $content_wrapper = $this->load->view('admin/courier-order-management/includes/user-address-wrapper', $data, true);
-        $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
-        return FALSE;
-    }
-
-    public function orderDelivered($id) {
-        $this->output->set_content_type('application/json');
-        $result = $this->courier_model->updateOrderStatusInRestaurant($id, "Delivered");
-        $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('courier/view-order')]));
-        return FALSE;
-    }
-
-    public function search_for_order() {
-        $this->output->set_content_type('application/json');
-        $data['user'] = $this->getUserData();
-        $data['map'] = 'Search';
-    }
-
-    public function view_delivered_order() {
-        $data['title'] = "Courier Delivered Order";
-        $data['user'] = $this->getUserData();
-        $data['getRestaurantUserDetail'] = $this->getAllCourierData();
-        $this->load->view('admin/commons/header', $data);
-        $this->load->view('admin/commons/courier-sidebar', $data);
-        $this->load->view('admin/courier-delivered-order-management/view-order');
-        $this->load->view('admin/commons/footer');
-    }
-
-    public function get_courier_restaurant_delivered_order_wrapper() {
-        $this->output->set_content_type('application/json');
-        $data['user'] = $this->getUserData();
-        $data['getRestaurantUserDetail'] = $this->getAllCourierData();
-        $content_wrapper = $this->load->view('admin/courier-delivered-order-management/order-wrapper', $data, true);
-        $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
-        return FALSE;
-    }
-
-    public function getletlng() {
-        $this->output->set_content_type('application/json');
-        $address = $this->input->post('address');
-        $formatted_address = str_replace([',', " "], "-", $address);
-        $destlat = $this->input->post(lat);
-        $deslong = $this->input->post(long);
-        $geocode_stats = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCda3VpSiUTaG60fI3sH4Ch2L1ch0Fo06A&address=G-130-Gblock-noida-India&sensor=false");
-        $output_deals = json_decode($geocode_stats);
-        $latLng = $output_deals->results[0]->geometry->location;
-        $latitude = $latLng->lat;
-        $longitude = $latLng->lng;
-        $url = 'https://maps.google.com/?saddr=' . $latitude . ',' . $longitude . '&daddr=' . $destlat . ',' . $deslong;
-        $this->output->set_output(json_encode(['url' => $url]));
-        return FALSE;
     }
 
 }
