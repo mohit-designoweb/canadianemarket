@@ -181,6 +181,7 @@ if (!empty($ratings)) {
                                             <a href="javascript:void(0)" class="filteration" data-val="price_hi_low">Price (High-low)</a>
                                             <a href="javascript:void(0)" class="filteration" data-val="price_low_hi">Price (Low - high)</a>
                                             <a href="javascript:void(0)" class="filteration" data-val="free_delivery">Free Delivery</a>
+                                            
                                             <!--<a href="javascript:void(0)" class="filteration" data-val="new_product">New products</a>-->
                                             <!--<a href="javascript:void(0)" class="filteration" data-val="review_score">E Market review score</a>-->
                                             <!--<a href="javascript:void(0)">Most ordered</a>-->

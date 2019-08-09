@@ -25,7 +25,7 @@
                             ?>
                             <div class="form-row">
                                 <div class="col-6">
-                                    <img src=" <?php echo base_url('uploads/partner/'.$user['image_url']); ?>" height="160px" width="160px" class="img-circle" />
+                                    <img src=" <?php echo base_url('uploads/profile_images/'.$user['image_url']); ?>" height="160px" width="160px" class="img-circle" />
                                 </div>
                             </div>
                             <?php

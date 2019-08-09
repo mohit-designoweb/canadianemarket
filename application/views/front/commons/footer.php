@@ -375,9 +375,7 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                               
-                                                <input type="text" name="courireOtp" class="form-control" id="courireOtp" value="<?php echo $user_data['unique_id'];?>" placeholder="Enter One Time Password">
-
+                                                <p><b><?php echo $user_data['unique_id'];?></b></p>
                                             </div>
                                         </div>
                                     </div>

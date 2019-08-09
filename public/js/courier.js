@@ -275,7 +275,7 @@ var Event = function () {
                     }
                 }
             });
-        });
+        })
 
         $(document).on('click', '#imgFileUpload', function (evt) {
             evt.preventDefault();
@@ -585,12 +585,6 @@ var Event = function () {
             var postdata = $(this).serialize();
             $.post(url, postdata, function (out) {
                 if (out.result === 1) {
-                     swal({
-                        title: "Updated",
-                        text: "Item Added To Cart!",
-                        icon: "success",
-                        button: "Ok",
-                    });
                     obj.getRestaurantMenu();
                     obj.specialMenuWrapper();
                     obj.orderWrapper();
@@ -605,12 +599,6 @@ var Event = function () {
             var url = $(this).attr('href');
             $.post(url, '', function (out) {
                 if (out.result === 1) {
-                    swal({
-                        title: "Updated",
-                        text: "Item Remove From Cart!",
-                        icon: "success",
-                        button: "Ok",
-                    });
                     obj.getRestaurantMenu();
                     obj.specialMenuWrapper();
                     obj.orderWrapper();

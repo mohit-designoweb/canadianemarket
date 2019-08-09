@@ -151,6 +151,12 @@ class Store extends CI_Controller {
             } else if ($filter_val == 'free_delivery') {
                 $store = $this->ecommerce_model->getFreeDeliveryStore($per_page, $srt, $store_category);
             }
+            else if ($filter_val == 'new_store') {
+                $store = $this->ecommerce_model->getNewActiveStore($per_page, $srt, $store_category);
+            }
+            else if ($filter_val == 'old_store') {
+                $store = $this->ecommerce_model->getOldActiveStore($per_page, $srt, $store_category);
+            }
         } else if (!empty($search_val)) {
             $store = $this->ecommerce_model->getStoreBySearch($per_page, $srt, $search_val);
         } else {
