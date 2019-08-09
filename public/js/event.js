@@ -27,16 +27,7 @@ var Event = function () {
         this.outForDelivery();
         this.itemRecieved();
         this.changeCourierStatus();
-<<<<<<< HEAD
-		this.commonFormPassword();
-		this.getLiveTracking();
-		this.forgotPassword();
-		this.updateForgotPassword();
-		this.address();
-        this.restaurantAddress();
-        this.userAddress();
-        this.updateOrderStatus();
-=======
+
         this.commonFormPassword();
         this.getLiveTracking();
         this.forgotPassword();
@@ -52,12 +43,11 @@ var Event = function () {
         this.storeWrapperImageCommonForm();
         this.restaurantWrapperCommonForm();
         this.restaurantWrapperImageCommonForm();
->>>>>>> a811c12bce5dab1cb573e729817230853cc40c85
     };
-    
-    this.loader=function(){
-        $(document).ready(function(){
-             $(".loader").fadeOut("slow");
+
+    this.loader = function () {
+        $(document).ready(function () {
+            $(".loader").fadeOut("slow");
         });
     };
 
@@ -136,7 +126,7 @@ var Event = function () {
         });
     };
 
- this.imageCommonForm1 = function () {
+    this.imageCommonForm1 = function () {
         $("#image-common-form1").submit(function (evt) {
             evt.preventDefault();
             $(".loader").fadeIn("slow");
@@ -151,8 +141,8 @@ var Event = function () {
                     $(".loader").fadeOut("slow");
                     $(".form-group > .error").remove();
                     if (out.result === 0) {
-                            $("#userfile").after('<span class="error" style="position: absolute;">' + out.errors + '</span>');
-                     }
+                        $("#userfile").after('<span class="error" style="position: absolute;">' + out.errors + '</span>');
+                    }
                     if (out.result === -1) {
                         var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
                         $("#error_msg").removeClass('alert-warning alert-success').addClass('alert alert-danger alert-dismissable').show();
@@ -188,17 +178,17 @@ var Event = function () {
         $(document).on('click', '.change-status', function (e) {
             e.preventDefault();
             var cls = $(this).children("i").attr("class");
-            
-            if(cls == "fe fe-thumbs-down"){
+
+            if (cls == "fe fe-thumbs-down") {
                 $(this).html("Active <i class='fe fe-thumbs-up'></i>");
-                if($(this).parent("td").prev("td").html() == "Inactive") {
-                $(this).parent("td").prev("td").html("Active");
-            }
-            }else{
+                if ($(this).parent("td").prev("td").html() == "Inactive") {
+                    $(this).parent("td").prev("td").html("Active");
+                }
+            } else {
                 $(this).html("Inactive <i class='fe fe-thumbs-down'></i>");
-                if($(this).parent("td").prev("td").html() == "Active") {
-                $(this).parent("td").prev("td").html("Inactive");
-            }
+                if ($(this).parent("td").prev("td").html() == "Active") {
+                    $(this).parent("td").prev("td").html("Inactive");
+                }
             }
             var url = $(this).attr("href");
             $.post(url, function (out) {
@@ -208,14 +198,14 @@ var Event = function () {
             });
         });
     };
-	
+
     this.changeStatusOpenOrClose = function () {
         $(document).on('click', '.cstm-switch-input', function (e) {
             e.preventDefault();
             var url = $(this).attr("value");
             //alert(url);
             $.post(url, function (out) {
-            
+
                 if (out.result === 1) {
                     obj.contentWrapper();
                 }
@@ -254,34 +244,34 @@ var Event = function () {
             });
         });
     };
-    
-    this.delete=function(){
-      $(document).on('click','.delete',function(e){
-          e.preventDefault();
-          var url = $(this).attr("href");
-          var result = confirm("Are you sure, you want to delete?");
-          if(result==true)
-          {
-              $.post(url,'',function(out){
-                 window.location.href = out.url;
-             });
-          }
-      });  
+
+    this.delete = function () {
+        $(document).on('click', '.delete', function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            var result = confirm("Are you sure, you want to delete?");
+            if (result == true)
+            {
+                $.post(url, '', function (out) {
+                    window.location.href = out.url;
+                });
+            }
+        });
     };
-    
-    this.jobtype=function(){
-        $(document).on('change','#job_category_id',function(e){
+
+    this.jobtype = function () {
+        $(document).on('change', '#job_category_id', function (e) {
             e.preventDefault();
             var val = $(this).val();
             var url = $(this).data('url');
-           // alert(url);
-            $.post(url,{val:val},function(out){
+            // alert(url);
+            $.post(url, {val: val}, function (out) {
                 $("#job_type_id").html(out.content_wrapper);
-            }); 
+            });
         });
     };
-	
-	this.getGeoLocation = function () {
+
+    this.getGeoLocation = function () {
         $(document).ready(function () {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition);
@@ -300,7 +290,7 @@ var Event = function () {
 
         });
     };
-	this.deleteImage = function () {
+    this.deleteImage = function () {
         $(document).on('click', '.delete-image', function (e) {
             e.preventDefault();
             var url = $(this).attr("href");
@@ -336,7 +326,7 @@ var Event = function () {
 
         });
     };
-	this.doUpdateOrderStatus = function () {
+    this.doUpdateOrderStatus = function () {
         $(document).on('change', '#status', function (evt) {
             evt.preventDefault();
             var selectedValue = $(this).val();
@@ -348,11 +338,11 @@ var Event = function () {
 
         });
     };
-   
+
     this.getGeoLocation = function () {
 
         $(document).on('click', '#start-service', function () {
-            
+
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition);
             } else {
@@ -388,14 +378,14 @@ var Event = function () {
 
         });
     };
-    
-	this.commonFormPassword = function(){
-        $(document).on('submit','#common-form-password', function(evt){
-           evt.preventDefault();
-           $(".loader").fadeIn("slow");
+
+    this.commonFormPassword = function () {
+        $(document).on('submit', '#common-form-password', function (evt) {
+            evt.preventDefault();
+            $(".loader").fadeIn("slow");
             var url = $(this).attr("action");
             var postdata = $(this).serialize();
-            
+
             $.post(url, postdata, function (out) {
                 $(".loader").fadeOut("slow");
                 $(".form-group > .error").remove();
@@ -420,10 +410,10 @@ var Event = function () {
                     }, 1000);
                 }
             });
-            
+
         });
     }
-	 this.courierWrapper = function () {
+    this.courierWrapper = function () {
         $(document).ready(function () {
             var url = $('#courier-wrapper').attr('data-url');
             $.post(url, '', function (out) {
@@ -578,7 +568,7 @@ var Event = function () {
             });
         });
     };
-	 this.getLiveTracking = function () {
+    this.getLiveTracking = function () {
         $(document).on('click', '#path', function (e) {
             e.preventDefault();
             var url = $(this).data('url');
@@ -586,31 +576,31 @@ var Event = function () {
             var latitude;
             var longitude;
             $(document).ready(function () {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-                alert("Geolocation is not supported by this browser.");
-            }
-            function showPosition(position) {
-               // var url = $('#base-url').val();
-                latitude = position.coords.latitude;
-                longitude = position.coords.longitude;
-                $.post(url,{address : address,lat:latitude,long:longitude},function(res){
-                //alert(res.url);
-                window.open(res.url,'_blank');
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition);
+                } else {
+                    alert("Geolocation is not supported by this browser.");
+                }
+                function showPosition(position) {
+                    // var url = $('#base-url').val();
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                    $.post(url, {address: address, lat: latitude, long: longitude}, function (res) {
+                        //alert(res.url);
+                        window.open(res.url, '_blank');
+                    });
+                }
             });
-            }
         });
-       });
     };
-	 
-	 this.forgotPassword = function(){
-        
-        $(document).on('submit','#common-form-forgot-password' , function(e){
+
+    this.forgotPassword = function () {
+
+        $(document).on('submit', '#common-form-forgot-password', function (e) {
             e.preventDefault();
             var url = $(this).attr("action");
             var postdata = $(this).serialize();
-           
+
             $.post(url, postdata, function (out) {
                 $(".form-group > .error").remove();
                 if (out.result === 0) {
@@ -620,33 +610,33 @@ var Event = function () {
                     }
                 }
                 if (out.result === -1) {
-                  
-                    $("#error_msg").html(out.errors).css('color','red');
+
+                    $("#error_msg").html(out.errors).css('color', 'red');
                     $("#email").focus();
                 }
                 if (out.result === 1) {
                     //alert(out.msg);
-					 //$("#error_msg").html(out.msg).css('color','red');
-					var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    //$("#error_msg").html(out.msg).css('color','red');
+                    var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
                     $("#error_msg").removeClass('alert-success alert-success').addClass('alert alert-danger alert-dismissable').show();
                     $("#error_msg").html(message + out.msg);
                     $("#error_msg").fadeOut(9000);
-					 
+
                     //window.location.href = out.url;
                 }
             });
-            
+
         });
     }
-	
-	this.updateForgotPassword = function(){
-        $(document).on('submit','#update-forgot-password', function(e) {
-             e.preventDefault();
+
+    this.updateForgotPassword = function () {
+        $(document).on('submit', '#update-forgot-password', function (e) {
+            e.preventDefault();
             var url = $(this).attr("action");
             var postdata = $(this).serialize();
             //alert(url);
             //alert(postdata);
-            
+
             $.post(url, postdata, function (out) {
                 $(".form-group > .error").remove();
                 if (out.result === 0) {
@@ -658,24 +648,24 @@ var Event = function () {
                 }
                 if (out.result === -1) {
                     //alert(out.errors);
-                    $("#error_msg").html(out.errors).css('color','red');
+                    $("#error_msg").html(out.errors).css('color', 'red');
                     $("#email").focus();
                 }
                 if (out.result === 1) {
                     var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
                     $("#error_msg").removeClass('alert-danger alert-danger').addClass('alert alert-success alert-dismissable').show();
                     $("#error_msg").html(message + out.msg);
-					$("#error_msg").fadeOut(9000);
+                    $("#error_msg").fadeOut(9000);
                     window.location.href = out.url;
                 }
             });
-            
+
         });
-<<<<<<< HEAD
+
     };
-	this.address = function()
-        {
-            $(document).on("click", "#address-detail", function () {
+    this.address = function ()
+    {
+        $(document).on("click", "#address-detail", function () {
             var url = $(this).data('url');
             $.post(url, '', function (res) {
                 if (res.result == 1) {
@@ -683,10 +673,10 @@ var Event = function () {
                 }
             });
         });
-        };
-         this.restaurantAddress = function()
-        {
-            $(document).on("click", "#rest-address-detail", function () {
+    };
+    this.restaurantAddress = function ()
+    {
+        $(document).on("click", "#rest-address-detail", function () {
             var url = $(this).data('url');
             $.post(url, '', function (res) {
                 if (res.result == 1) {
@@ -694,10 +684,10 @@ var Event = function () {
                 }
             });
         });
-        };
-        this.userAddress = function()
-        {
-            $(document).on("click", "#user-add-detail", function () {
+    };
+    this.userAddress = function ()
+    {
+        $(document).on("click", "#user-add-detail", function () {
             var url = $(this).data('url');
             $.post(url, '', function (res) {
                 if (res.result == 1) {
@@ -705,28 +695,27 @@ var Event = function () {
                 }
             });
         });
-        };
-        this.updateOrderStatus = function()
-        {
-            $(document).on("click","#update-order-status",function(){
-                var url = $(this).data('url');
-                $.post(url,'',function(res){
-                    if(res.result === 1){
-                        window.location.href=res.url;
-                    }
-                });
+    };
+    this.updateOrderStatus = function ()
+    {
+        $(document).on("click", "#update-order-status", function () {
+            var url = $(this).data('url');
+            $.post(url, '', function (res) {
+                if (res.result === 1) {
+                    window.location.href = res.url;
+                }
             });
-        };
-=======
-    }
-    
+        });
+    };
+
+
     this.storeWrapper = function () {
         $(document).ready(function () {
             var url = '';
             if ($('.storetabs').hasClass('active')) {
                 url = $('.storetabs').attr('href');
             }
->>>>>>> a811c12bce5dab1cb573e729817230853cc40c85
+
 
             $.post(url, '', function (out) {
                 if (out.result === 1) {
@@ -749,7 +738,7 @@ var Event = function () {
                 }
             });
         });
-        
+
         $(document).on('click', '.storetabs-edit', function (evt) {
             evt.preventDefault();
 //            $('.storetabs').removeClass('active');
@@ -765,7 +754,7 @@ var Event = function () {
                 }
             });
         });
-        
+
     };
 
     this.deliveryCharge = function () {
@@ -818,9 +807,9 @@ var Event = function () {
                 success: function (out) {
                     $(".loader").fadeOut("slow");
                     $(".form-group > .error").remove();
-                    
+
                     if (out.result === 0) {
-                        
+
                         for (var i in out.errors) {
                             $("#error_msgs").append('<span class="error">' + out.errors[i] + '</span>');
 //                            $("#" + i).parents(".form-group").append('<span class="error">' + out.errors[i] + '</span>');
@@ -871,7 +860,7 @@ var Event = function () {
                 }
             });
         });
-        
+
         $(document).on('click', '.restauranttabs_edit', function (evt) {
             evt.preventDefault();
 //            $('.restauranttabs').removeClass('active');
@@ -893,20 +882,20 @@ var Event = function () {
         $(document).on('change', '#bulk_actions', function (evt) {
             evt.preventDefault();
             var value = $(this).val();
-            var url = ($(this).attr('data-url'))+value;
+            var url = ($(this).attr('data-url')) + value;
             alert(url);
             var checkboxValues = [];
             $(':checkbox:checked').each(function () {
                 checkboxValues.push($(this).data('id'));
             });
 
-            $.post(url,{product_ids:checkboxValues,value:value},function(out){
-               alert(out); 
+            $.post(url, {product_ids: checkboxValues, value: value}, function (out) {
+                alert(out);
             });
-            
+
         });
     };
-    
+
     this.editMenuWrapper = function () {
         $(document).on('click', '.editMenu', function () {
             $('#editMenuModel').modal('show');
@@ -918,13 +907,13 @@ var Event = function () {
             });
         });
     };
-    
+
     this.storeWrapperCommonForm = function () {
         $(document).on('submit', '#store-wrapper-common-form', function (evt) {
             evt.preventDefault();
             $(".loader").fadeIn("slow");
             var url = $(this).attr("action");
-            
+
             var postdata = $(this).serialize();
             $.post(url, postdata, function (out) {
                 $(".loader").fadeOut("slow");
@@ -946,9 +935,9 @@ var Event = function () {
                     $("#error_msg").removeClass('alert-danger alert-danger').addClass('alert alert-success alert-dismissable').show();
                     $("#error_msg").html(message + out.msg);
                     $("#error_msg").fadeOut(2000);
-                    
-                    var active_url=$(".storetabs.active").attr('href');
-                    
+
+                    var active_url = $(".storetabs.active").attr('href');
+
                     $.post(active_url, '', function (out) {
                         if (out.result === 1) {
                             $('#store-wrapper').html(out.store_content_wrapper);
@@ -962,7 +951,7 @@ var Event = function () {
             });
         });
     };
-    
+
     this.storeWrapperImageCommonForm = function () {
         $(document).on('submit', '#store-wrapper-image-form', function (evt) {
             evt.preventDefault();
@@ -999,12 +988,12 @@ var Event = function () {
                         window.setTimeout(function () {
                             window.location.href = out.url;
                         }, 1000);
-                        
-                        var active_url=$(".storetabs.active").attr('href');
-                        
+
+                        var active_url = $(".storetabs.active").attr('href');
+
                         $.post(active_url, '', function (out) {
                             if (out.result === 1) {
-                                
+
                                 $('#store-wrapper').html(out.store_content_wrapper);
                                 $('#example').DataTable({
                                     responsive: true,
@@ -1017,13 +1006,13 @@ var Event = function () {
             });
         });
     };
-    
+
     this.restaurantWrapperCommonForm = function () {
         $(document).on('submit', '#restaurant-wrapper-common-form', function (evt) {
             evt.preventDefault();
             $(".loader").fadeIn("slow");
             var url = $(this).attr("action");
-            
+
             var postdata = $(this).serialize();
             $.post(url, postdata, function (out) {
                 $(".loader").fadeOut("slow");
@@ -1045,9 +1034,9 @@ var Event = function () {
                     $("#error_msg").removeClass('alert-danger alert-danger').addClass('alert alert-success alert-dismissable').show();
                     $("#error_msg").html(message + out.msg);
                     $("#error_msg").fadeOut(2000);
-                    
-                    var active_url=$(".restauranttabs.active").attr('href');
-                    
+
+                    var active_url = $(".restauranttabs.active").attr('href');
+
                     $.post(active_url, '', function (out) {
                         if (out.result === 1) {
                             $('#restaurant-wrapper').html(out.restaurant_content_wrapper);
@@ -1061,12 +1050,12 @@ var Event = function () {
             });
         });
     };
-    
+
     this.restaurantWrapperImageCommonForm = function () {
         $(document).on('submit', '#restaurant-wrapper-image-form', function (evt) {
             evt.preventDefault();
             $(".loader").fadeIn("slow");
-            
+
             $.ajax({
                 url: $(this).attr("action"),
                 type: "post",
@@ -1099,9 +1088,9 @@ var Event = function () {
                         window.setTimeout(function () {
                             window.location.href = out.url;
                         }, 1000);
-                        
-                        var active_url=$(".restauranttabs.active").attr('href');
-                    
+
+                        var active_url = $(".restauranttabs.active").attr('href');
+
                         $.post(active_url, '', function (out) {
                             if (out.result === 1) {
                                 $('#restaurant-wrapper').html(out.restaurant_content_wrapper);
@@ -1116,7 +1105,7 @@ var Event = function () {
             });
         });
     };
-    
+
     this.__construct();
 };
 var obj = new Event();
