@@ -350,11 +350,6 @@ class Ecommerce_model extends CI_Model {
         $this->db->select('rc.category_name,r.image_url,r.restaurant_name,r.address,r.latitude,r.longitude,r.opening_time_from,r.opening_time_to,r.delivery_time,r.is_open');
         $this->db->from('restaurant r');
         $this->db->join('restaurant_category rc', 'r.restaurant_category_id=rc.restaurant_category_id');
-<<<<<<< HEAD
-
-=======
-        $this->db->join('partner p', 'r.partner_id=p.partner_id');
->>>>>>> 4e41bc8f501c48c0a6063cff0c8a2ee9238b0ccc
         $this->db->where('r.is_active', 'Active');
         $this->db->where('r.restaurant_category_id', $restaurant_category);
         $this->db->order_by('r.is_open', 'Enable');
@@ -383,16 +378,6 @@ class Ecommerce_model extends CI_Model {
         $this->db->select('rc.category_name,r.image_url,r.restaurant_name,r.address,r.latitude,r.longitude,r.opening_time_from,r.opening_time_to,r.delivery_time,r.is_open');
         $this->db->from('restaurant r');
         $this->db->join('restaurant_category rc', 'r.restaurant_category_id=rc.restaurant_category_id');
-<<<<<<< HEAD
-
-=======
-        $this->db->join('partner p', 'r.partner_id=p.partner_id');
-        $this->db->where('r.is_active', 'Active');
-        $this->db->where('r.delivery_charge', 0);
-        $this->db->where('r.restaurant_category_id', $restaurant_category);
-        $this->db->where('p.is_active', 'Active');
-        $this->db->order_by('r.is_open', 'Enable');
->>>>>>> 4e41bc8f501c48c0a6063cff0c8a2ee9238b0ccc
         $this->db->limit($limit, $start);
         $query = $this->db->get();
         return $query->result_array();
