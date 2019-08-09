@@ -5,6 +5,7 @@ foreach ($menus as $menu) {
     <div class="cart_items boxs">
         <form method="post" action="<?php echo base_url('restaurant/addToCartMenu'); ?>" class="add-to-cart">
             <div class="item_img">
+                <i class="fa fa-heart"></i>
                 <img src="<?php echo base_url('uploads/menu/' . $menu['image_url']); ?>" alt="itemimg" class="img-responsive">
             </div>
             <div class="item_details itemDet">

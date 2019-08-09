@@ -653,7 +653,6 @@ class Ecommerce_model extends CI_Model {
         $this->db->order_by('s.insert_date','DESC');
         $this->db->limit($limit, $start);
         $query = $this->db->get();
-        echo $this->db->last_query(); die;
         return $query->result_array();
     }
     public function getOldActiveStore($limit, $start, $store_category) {
@@ -668,7 +667,6 @@ class Ecommerce_model extends CI_Model {
         $this->db->order_by('s.insert_date');
         $this->db->limit($limit, $start);
         $query = $this->db->get();
-        echo $this->db->last_query(); die;
         return $query->result_array();
     }
 
