@@ -85,8 +85,9 @@
                                         </button>
                                         <div class="filDrop_content">
                                             <a href="javascript:void(0)" class="filteration" data-val="most_viewed">Most viewed</a>
-                                            <a href="javascript:void(0)" class="filteration" data-val="new_restaurant">New Restaurant</a>
                                             <a href="javascript:void(0)" class="filteration" data-val="free_delivery">Free Delivery</a>
+                                            <a href="javascript:void(0)" class="filteration" data-val="new_restaurant">New Restaurant</a>
+                                            <a href="javascript:void(0)" class="filteration" data-val="old_restaurant">Old Restaurant</a>
                                         </div>
                                     </div>
                                 </div>

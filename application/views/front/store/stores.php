@@ -101,6 +101,8 @@
                                             <a href="javascript:void(0)" class="filteration" data-val="most_viewed">Most Viewed</a>
                                             <!--<a href="javascript:void(0)" class="filteration" data-val="review_score">E Market review score</a>-->
                                             <a href="javascript:void(0)" class="filteration" data-val="free_delivery">Delivery fee</a>
+                                            <a href="javascript:void(0)" class="filteration" data-val="new_store">New Store</a>
+                                            <a href="javascript:void(0)" class="filteration" data-val="old_store">Old Store</a>
                                         </div>
                                     </div>
                                 </div>

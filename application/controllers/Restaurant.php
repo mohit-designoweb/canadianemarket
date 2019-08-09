@@ -176,7 +176,10 @@ class Restaurant extends CI_Controller {
                 $restaurant = $this->ecommerce_model->getMostViewedActiveRestaurant($per_page, $srt, $restaurant_category);
             } else if ($filter_val == 'new_restaurant') {
                 $restaurant = $this->ecommerce_model->getNewActiveRestaurant($per_page, $srt, $restaurant_category);
-            } else if ($filter_val == 'free_delivery') {
+            }else if ($filter_val == 'old_restaurant') {
+                $restaurant = $this->ecommerce_model->getOldActiveRestaurant($per_page, $srt, $restaurant_category);
+            }
+            else if ($filter_val == 'free_delivery') {
                 $restaurant = $this->ecommerce_model->getFreeDeliveryRestaurant($per_page, $srt, $restaurant_category);
             }
         } else if (!empty($search_val)) {
