@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Description of AdminStore
  *
@@ -37,8 +36,36 @@ class AdminStore extends CI_Controller {
         }
         return $list;
     }
+    
+    private function getTaxProvince() {
+        $list = ['' => '-- Select Province --'];
+        $taxs = $this->category_model->getAllTaxProvice();
+        foreach ($taxs as $tax) {
+            $list[$tax['id']] = $tax['province'];
+        }
+        return $list;
+    }
+    
+    private function getOrderFulfilmentTime() {
+        $list = ['' => '-- Select Time --'];
+        $times = $this->category_model->getOrderFulfilmentTime();
+        foreach ($times as $time) {
+            $list[$time['fulfilment_id']] = $time['fulfilment_time'];
+        }
+        return $list;
+    }
+    
+    private function filteredPartner() {
+        $list = ['' => 'Select the Partner'];
+        $partners = $this->category_model->getActivePartner();
+        foreach ($partners as $partner) {
+            $list[$partner['partner_id']] = $partner['first_name'] . ' ' . $partner['last_name'];
+        }
+        return $list;
+    }
 
     public function index() {
+        
         $data['title'] = 'Store';
         $data['table'] = '1';
         $data['user'] = $this->getUserData();
@@ -55,14 +82,21 @@ class AdminStore extends CI_Controller {
         $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
         return FALSE;
     }
-
-    private function filteredPartner() {
-        $list = ['' => 'Select the Partner'];
-        $partners = $this->category_model->getActivePartner();
-        foreach ($partners as $partner) {
-            $list[$partner['partner_id']] = $partner['first_name'] . ' ' . $partner['last_name'];
-        }
-        return $list;
+        
+    public function get_bydefault_wrapper($store_id){
+        $this->output->set_content_type('application/json');
+        $data['map'] = '1';
+        $data['table'] = '1';
+        $data['user'] = $this->getUserData();
+        $data['title'] = 'Store';
+        $data['partners'] = $this->filteredPartner();
+        $data['category'] = $this->getFilteredCategories();
+        $data['store'] = $this->category_model->getStoreById($store_id);
+        $data['taxProvince'] = $this->getTaxProvince();
+        $data['fulfilment'] = $this->getOrderFulfilmentTime();
+        $content_wrapper = $this->load->view('admin/store/include/edit-store-wrapper', $data, true);
+        $this->output->set_output(json_encode(['result' => 1, 'store_content_wrapper' => $content_wrapper]));
+        return FALSE;
     }
 
     public function addStore($id = null) {
@@ -74,9 +108,27 @@ class AdminStore extends CI_Controller {
         $data['title'] = 'Store';
         $data['partners'] = $this->filteredPartner();
         $data['category'] = $this->getFilteredCategories();
+        $data['taxProvince'] = $this->getTaxProvince();
+        $data['fulfilment'] = $this->getOrderFulfilmentTime();
         $this->load->view('admin/commons/header', $data);
         $this->load->view('admin/commons/admin-sidebar', $data);
         $this->load->view('admin/store/addStore');
+        $this->load->view('admin/commons/footer');
+    }
+    
+    public function editStore($id = null) {
+        if (!empty($id)) {
+            $data['store'] = $this->category_model->getStoreById($id);
+        }
+        $data['map'] = '1';
+        $data['user'] = $this->getUserData();
+        $data['title'] = 'Store';
+        $data['table']='1';
+        $data['partners'] = $this->filteredPartner();
+        $data['category'] = $this->getFilteredCategories();
+        $this->load->view('admin/commons/header', $data);
+        $this->load->view('admin/commons/admin-sidebar', $data);
+        $this->load->view('admin/store/editStore');
         $this->load->view('admin/commons/footer');
     }
 
@@ -99,19 +151,23 @@ class AdminStore extends CI_Controller {
 
     public function doAddStore() {
         $this->output->set_content_type('application/json');
-        $this->form_validation->set_rules('category_id', 'Category', 'required');
-        $this->form_validation->set_rules('partner_id', 'Partner', 'required');
-        $this->form_validation->set_rules('store_name', 'Store Name', 'required|is_unique[store.store_name]');
-        $this->form_validation->set_rules('country', 'Country', 'required');
-        $this->form_validation->set_rules('state', 'State', 'required');
-        $this->form_validation->set_rules('city', 'City', 'required');
-        $this->form_validation->set_rules('description', 'Description', 'required');
-        $this->form_validation->set_rules('delivery_charge', 'Delivery Charge', 'required');
-        $this->form_validation->set_rules('opening_time_from', 'Opening Time', 'required');
-        $this->form_validation->set_rules('opening_time_to', 'Closing Time', 'required');
-//        $this->form_validation->set_rules('latitude', 'Latitude', 'required');
-//        $this->form_validation->set_rules('longitude', 'Longitude', 'required');
-        $this->form_validation->set_rules('address', 'Address', 'required');
+        $this->form_validation->set_rules('category_id', 'Category', 'trim|required');
+        $this->form_validation->set_rules('partner_id', 'Partner', 'trim|required');
+        $this->form_validation->set_rules('store_name', 'Store Name', 'trim|required|is_unique[store.store_name]');
+        $this->form_validation->set_rules('country', 'Country', 'trim|required');
+        $this->form_validation->set_rules('state', 'State', 'trim|required');
+        $this->form_validation->set_rules('city', 'City', 'trim|required');
+        $this->form_validation->set_rules('tax_province', 'Tax Province', 'trim|required');
+        $this->form_validation->set_rules('description', 'Description', 'trim|required');
+        $this->form_validation->set_rules('delivery_charge', 'Delivery Charge', 'trim');
+        $this->form_validation->set_rules('opening_time_from', 'Opening Time', 'trim|required');
+        $this->form_validation->set_rules('opening_time_to', 'Closing Time', 'trim|required');
+        $this->form_validation->set_rules('return_policy', 'Return Policy', 'trim|required');
+        $this->form_validation->set_rules('store_notice', 'Store Notice', 'trim|required');
+        $this->form_validation->set_rules('estimated_delivery_time', 'Order Fulfilment time', 'trim|required');
+        $this->form_validation->set_rules('latitude', 'Latitude', 'trim|required');
+        $this->form_validation->set_rules('longitude', 'Longitude', 'trim|required');
+        $this->form_validation->set_rules('address', 'Address', 'trim|required');
         if ($this->form_validation->run() === FALSE) {
             $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
             return FALSE;
@@ -131,21 +187,16 @@ class AdminStore extends CI_Controller {
             return FALSE;
         }
     }
-
-    public function doEditStore($id) {
+    
+    /* Start Edit Store */
+    public function doEditStoreInfo($id) {
         $this->output->set_content_type('application/json');
         $this->form_validation->set_rules('category_id', 'Category', 'required');
         $this->form_validation->set_rules('partner_id', 'Partner', 'required');
-        $this->form_validation->set_rules('country', 'Country', 'required');
-        $this->form_validation->set_rules('state', 'State', 'required');
-        $this->form_validation->set_rules('city', 'City', 'required');
+        $this->form_validation->set_rules('store_name', 'Store Name', 'trim|required');
         $this->form_validation->set_rules('description', 'Description', 'required');
-        $this->form_validation->set_rules('delivery_charge', 'Delivery Charge', 'required');
-        $this->form_validation->set_rules('opening_time_from', 'Opening Time', 'required');
-        $this->form_validation->set_rules('opening_time_to', 'Closing Time', 'required');
-        $this->form_validation->set_rules('latitude', 'Latitude', 'required');
-        $this->form_validation->set_rules('longitude', 'Longitude', 'required');
-        $this->form_validation->set_rules('address', 'Address', 'required');
+        $this->form_validation->set_rules('return_policy', 'Return Policy', 'trim|required');
+        
         if ($this->form_validation->run() === FALSE) {
             $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
             return FALSE;
@@ -161,15 +212,110 @@ class AdminStore extends CI_Controller {
             $store = $this->category_model->getStoreById($id);
             $image_url = $store['image_url'];
         }
-        $result = $this->category_model->doEditStore($id, $image_url);
+        $result = $this->category_model->doEditStoreInfo($id, $image_url);
         if ($result) {
-            $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Detail updated sucessfully', 'url' => base_url('admin/adminStore')]));
+            $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Detail updated sucessfully', 'url' => base_url('admin/editStore/'.$id)]));
             return FALSE;
         } else {
             $this->output->set_output(json_encode(['result' => -1, 'msg' => 'No Changes Were Made.']));
             return FALSE;
         }
     }
+    
+    public function doEditStoreAddress($id) {
+        
+        $this->output->set_content_type('application/json');
+        $this->form_validation->set_rules('country', 'Country', 'required');
+        $this->form_validation->set_rules('state', 'State', 'required');
+        $this->form_validation->set_rules('city', 'City', 'required');
+        $this->form_validation->set_rules('latitude', 'Latitude', 'required');
+        $this->form_validation->set_rules('longitude', 'Longitude', 'required');
+        $this->form_validation->set_rules('address', 'Address', 'required');
+        if ($this->form_validation->run() === FALSE) {
+            $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
+            return FALSE;
+        }
+        
+        $result = $this->category_model->doEditStoreAddress($id);
+        if ($result) {
+            $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Detail updated sucessfully', 'url' => base_url('admin/editStore/'.$id)]));
+            return FALSE;
+        } else {
+            $this->output->set_output(json_encode(['result' => -1, 'msg' => 'No Changes Were Made.']));
+            return FALSE;
+        }
+    }
+    
+    public function doEditStoreOperation($id) {
+        
+        $this->output->set_content_type('application/json');
+        $this->form_validation->set_rules('opening_time_from', 'Opening Time', 'trim|required');
+        $this->form_validation->set_rules('opening_time_to', 'Closing Time', 'trim|required');
+        $this->form_validation->set_rules('store_notice', 'Store Notice', 'trim|required');
+        if ($this->form_validation->run() === FALSE) {
+            $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
+            return FALSE;
+        }
+        
+        $result = $this->category_model->doEditStoreOperation($id);
+        if ($result) {
+            $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Detail updated sucessfully', 'url' => base_url('admin/editStore/'.$id)]));
+            return FALSE;
+        } else {
+            $this->output->set_output(json_encode(['result' => -1, 'msg' => 'No Changes Were Made.']));
+            return FALSE;
+        }
+    }
+    
+    public function doEditStoreDeliveryTax($id) {
+        
+        $this->output->set_content_type('application/json');
+        $this->form_validation->set_rules('custom_charge', 'Custom Charge', 'trim|numeric');
+        $this->form_validation->set_rules('driver_instuction', 'Delivery Driver Instruction', 'trim|required');
+        $this->form_validation->set_rules('tax_province', 'Tax Province', 'trim|required');
+        $this->form_validation->set_rules('estimated_delivery_time', 'Order Fulfilment time', 'trim|required');
+        if ($this->form_validation->run() === FALSE) {
+            $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
+            return FALSE;
+        }
+        
+        $result = $this->category_model->doEditStoreDeliveryTax($id);
+        if ($result) {
+            $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Detail updated sucessfully', 'url' => base_url('admin/editStore/'.$id)]));
+            return FALSE;
+        } else {
+            $this->output->set_output(json_encode(['result' => -1, 'msg' => 'No Changes Were Made.']));
+            return FALSE;
+        }
+    }
+    
+    public function doEditStoreBank($id) {
+        
+        $this->output->set_content_type('application/json');
+        $this->form_validation->set_rules('holder_name', 'Account Holder Name', 'trim|required');
+        $this->form_validation->set_rules('account_number', 'Account Number', 'trim|required|numeric');
+        $this->form_validation->set_rules('ifsc_code', 'IFSC Code', 'trim|required');
+        $this->form_validation->set_rules('bank_name', 'Bank Name', 'trim|required');
+        $this->form_validation->set_rules('branch_name', 'Branch Name', 'trim|required');
+        $this->form_validation->set_rules('bank_address', 'Bank Address', 'trim|required');
+        if ($this->form_validation->run() === FALSE) {
+            $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
+            return FALSE;
+        }
+        
+        $result = $this->category_model->doEditStoreBank($id);
+        if ($result) {
+            $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Detail updated sucessfully', 'url' => base_url('admin/editStore/'.$id)]));
+            return FALSE;
+        } else {
+            $this->output->set_output(json_encode(['result' => -1, 'msg' => 'No Changes Were Made.']));
+            return FALSE;
+        }
+    }
+    
+    /* Start Edit Store */
+
+    /* Start Update Store on click */
 
     public function changeStoreStatus($id, $status) {
         $this->output->set_content_type('application/json');
@@ -178,16 +324,57 @@ class AdminStore extends CI_Controller {
         return FALSE;
     }
 
-	public function changeStoreStatusOpenOrClose($id, $status) {
+    public function changeStoreStatusOpenOrClose($id, $status) {
         $this->output->set_content_type('application/json');
         $this->category_model->changeStoreStatusOpenOrClose($id, $status);
         $this->output->set_output(json_encode(['result' => 1]));
         return FALSE;
     }
+    
+    public function changeStoreDeliveryChargeOnOrOff($id, $status) {
+        $this->output->set_content_type('application/json');
+        $this->category_model->changeStoreDeliveryChargeOnOrOff($id, $status);
+        $this->output->set_output(json_encode(['result' => 1]));
+        return FALSE;
+    }
+    
+    public function StoreDeliveryChargeType($id, $status) {
+        $this->output->set_content_type('application/json');
+        $this->category_model->StoreDeliveryChargeType($id, $status);
+        $this->output->set_output(json_encode(['result' => 1]));
+        return FALSE;
+    }
+    /* Start Update Store on click */
 
-
-//  Shop Section
-
+    //  Shop Section
+    
+    public function manage_shop_wrapper($store_id=NULL, $id = NULL){
+        $this->output->set_content_type('application/json');
+        
+        
+        if (!empty($id)) {
+            $data['shop_section'] = $this->category_model->getShopSectionById($store_id, $id);
+        }
+        
+        $data['store_id'] = $store_id;
+        $data['title'] = 'Shop Section';
+        $data['user'] = $this->getUserData();
+        $data['table'] = '1';
+        $data['stores'] = $this->getFilteredStores();
+        $data['user_type'] = $user_type = $this->session->userdata('user_type');
+        if ($user_type == 'service_provider') {
+            $user = $this->getUserData();
+            $data['shop_sections'] = $this->category_model->getShopSectionByServiceProviderId($store_id, $user['service_provider_id']);
+        } else {
+            $data['shop_sections'] = $this->category_model->getShopSection($store_id);
+            
+        }
+        $content_wrapper = $this->load->view('admin/store/include/manage-shop-wrapper', $data, true);
+        $this->output->set_output(json_encode(['result' => 1, 'store_content_wrapper' => $content_wrapper]));
+        return FALSE;
+    }
+   
+    
     public function shop_section($id = null) {
 		
         if (!empty($id)) {
@@ -205,7 +392,6 @@ class AdminStore extends CI_Controller {
 
     public function get_shop_section_wrapper() {
         $this->output->set_content_type('application/json');
-        $data['user_type'] = $user_type = $this->session->userdata('user_type');
         if ($user_type == 'service_provider') {
             $user = $this->getUserData();
             $data['shop_sections'] = $this->category_model->getShopSectionByServiceProviderId($user['service_provider_id']);
@@ -218,21 +404,19 @@ class AdminStore extends CI_Controller {
     }
 
     public function doAddShopSection() {
+        
         $this->output->set_content_type('application/json');
-        $this->form_validation->set_rules('store_id', 'Store Name', 'required');
-        $this->form_validation->set_rules('shop_section_name', 'Shop Section Name', 'required');
+        $this->form_validation->set_rules('shop_section_name', 'Product Category', 'required|trim|is_unique[shop_section.shop_section_name]');
         if ($this->form_validation->run() === FALSE) {
             $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
             return FALSE;
         }
+        
         $result = $this->category_model->doAddShopSection();
         if ($result) {
-            if ($this->user_type == 'admin') {
-                $this->output->set_output(json_encode(['result' => 1, 'msg' => 'details added sucessfully', 'url' => base_url('admin/shop-section')]));
-            } else if ($this->user_type == 'partner') {
-                $this->output->set_output(json_encode(['result' => 1, 'msg' => 'details added sucessfully', 'url' => base_url('partner/shop-section')]));
-            }
+            $this->output->set_output(json_encode(['result' => 1, 'msg' => 'details added sucessfully', 'url' => base_url('admin/adminStore')]));
             return FALSE;
+            
         } else {
             $this->output->set_output(json_encode(['result' => -1, 'msg' => 'Category did not added sucessfully.']));
             return FALSE;
@@ -249,11 +433,7 @@ class AdminStore extends CI_Controller {
         }
         $result = $this->category_model->doEditShopSection($id);
         if ($result) {
-            if ($this->user_type == 'admin') {
-                $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Details updated sucessfully', 'url' => base_url('admin/shop-section')]));
-            } else if ($this->user_type == 'partner') {
-                $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Details updated sucessfully', 'url' => base_url('partner/shop-section')]));
-            }
+            $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Details updated sucessfully', 'url' => base_url('admin/adminStore')]));
             return FALSE;
         } else {
             $this->output->set_output(json_encode(['result' => -1, 'msg' => 'No Changes Were Made']));

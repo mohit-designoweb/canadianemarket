@@ -13,7 +13,7 @@
                     <i class="icon-placeholder fe fe-activity "></i>
                 </span>
             </a>
-			<!--<ul class="sub-menu">
+			<ul class="sub-menu">
                 <li class="menu-item <?php if($title=='New Order'){ echo 'active'; } ?>">
                     <a href="#" class="menu-link">
                         <span class="menu-label">
@@ -47,48 +47,7 @@
                         </span>
                     </a>
                 </li>
-            </ul> -->   
-        </li>
-		<li class="menu-item <?php if($title=='Admin Restaurant Orders'|$title=='Admin Store Orders'){ echo 'active opened'; } ?>">
-            <a href="#" class="open-dropdown menu-link">
-                <span class="menu-label">
-                    <span class="menu-name">New Orders
-                    </span>
-                    <span class="arrowcaret">
-                        <i class="fa fa-angle-down" aria-hidden="true"></i>
-                        <i class="fa fa-angle-up" aria-hidden="true"></i>
-                    </span>
-                </span>
-                <span class="menu-icon">
-                    <i class="icon-placeholder fe fe-activity"></i>
-                </span>
-            </a>
-            <!--submenu-->
-            <ul class="sub-menu" <?php if($title=='Admin Restaurant Orders'|$title=='Add Registered User'){ echo 'style="display: block;"'; } ?>>
-
-                <li class="menu-item <?php if($title=='Admin Restaurant Orders'){ echo 'active'; } ?>">
-                    <a href="<?php echo base_url('admin/restaurant-orders') ?>" class="menu-link">
-                        <span class="menu-label">
-                            <span class="menu-name">Restaurant Orders</span>
-                        </span>
-                        <span class="menu-icon">
-                            <i class="icon-placeholder mdi mdi-step-forward"></i>
-                        </span>
-                    </a>
-                </li>    
-
-                <li class="menu-item <?php if($title=='Admin Store Orders'){ echo 'active'; } ?>">
-                    <a href="<?php echo base_url('admin/store-orders'); ?>" class="menu-link">
-                        <span class="menu-label">
-                            <span class="menu-name">Store Orders</span>
-                        </span>
-                        <span class="menu-icon">
-                            <i class="icon-placeholder mdi mdi-step-forward"></i>
-                        </span>
-                    </a>
-                </li>
-
-            </ul>
+            </ul>    
         </li>
 		<!--
         <li class="menu-item <?php if($title=='New Order'){ echo 'active'; } ?>">
@@ -192,8 +151,8 @@
             </a>
             <!--submenu-->
             <ul class="sub-menu" <?php if($title=='Partner'|$title=='Add Partner'|$title=='Restaurant Category'|$title=="Restaurant"|$title=='Store Category'|$title=='Store'|$title=='Shop Section'|$title=='Product'|$title=='Partner Application'|$title=='Market Category'|$title=='Market'|$title=='Market Place Product'){ echo 'style="display: block;"'; } ?>>
-                <!--
-				<li class="menu-item <?php if($title=='User Specification'){ echo 'active'; } ?>">
+                
+<!--		<li class="menu-item <?php if($title=='User Specification'){ echo 'active'; } ?>">
                     <a href="<?php echo base_url('admin/user-specification'); ?>" class=' menu-link'>
                         <span class="menu-label">
                             <span class="menu-name">User Specification</span>
@@ -202,21 +161,9 @@
                             <i class="fa fa-cogs" aria-hidden="true"></i>
                         </span>
                     </a>
-                </li>
-				-->
-				<!--
-                <li class="menu-item <?php if($title=='Store Category'){ echo 'active'; } ?>">
-                    <a href="<?php echo base_url('admin/storeCategory'); ?>" class=' menu-link'>
-                        <span class="menu-label">
-                            <span class="menu-name">Store Category</span>
-                        </span>
-                        <span class="menu-icon">
-                            <i class="icon-placeholder mdi mdi-calendar-edit "></i>
-                        </span>
-                    </a>
-                </li>
-                -->
-                <li class="menu-item <?php if($title=='Store'){ echo 'active'; } ?>">
+                </li>-->
+		             
+	        <li class="menu-item <?php if($title=='Store'){ echo 'active'; } ?>">
                     <a href="<?php echo base_url('admin/adminStore'); ?>" class=' menu-link'>
                         <span class="menu-label">
                             <span class="menu-name">Store</span>
@@ -227,7 +174,21 @@
                     </a>
                 </li>
                 
-				 <li class="menu-item <?php if($title=='Shop Section'|$title=='Product'){ echo 'active'; } ?>">
+<!--                <li class="menu-item <?php if($title=='Store Category'){ echo 'active'; } ?>">
+                    <a href="<?php echo base_url('admin/storeCategory'); ?>" class=' menu-link'>
+                        <span class="menu-label">
+                            <span class="menu-name">Store Category</span>
+                        </span>
+                        <span class="menu-icon">
+                            <i class="icon-placeholder mdi mdi-calendar-edit "></i>
+                        </span>
+                    </a>
+                </li>-->
+                
+                
+<!--                <li class="menu-item <?php if ($title == 'Shop Section' | $title == 'Product') {
+                        echo 'active';
+                    } ?>">
                     <a href="<?php echo base_url('admin/shop-section'); ?>" class=' menu-link'>
                         <span class="menu-label">
                             <span class="menu-name">Shop Section</span>
@@ -236,7 +197,7 @@
                             <i class="icon-placeholder mdi mdi-calendar-edit "></i>
                         </span>
                     </a>
-                </li>
+                </li>-->
 				<!--
                 <li class="menu-item <?php if($title=='Restaurant Category'){ echo 'active'; } ?>">
                     <a href="<?php echo base_url('admin/restaurant-category'); ?>" class=' menu-link'>
@@ -334,7 +295,7 @@
                 </li>
 
                 <li class="menu-item <?php if($title=='Shop Section'){ echo 'active'; } ?>">
-                    <a href="<?php echo base_url('admin/courierSection');?>" class="menu-link">
+                    <a href="#" class="menu-link">
                         <span class="menu-label">
                             <span class="menu-name">Manage Couriers</span>
                         </span>
@@ -396,9 +357,9 @@
                 </span>
             </a>
             <!--submenu-->
-            <ul class="sub-menu" <?php if($title=='Job Category'|$title=='Job Type'|$title=='Job Board'|$title=='Job Applied'){ echo 'style="display: block;"'; } ?>>
+            <ul class="sub-menu" <?php if($title=='Job Category'|$title=='Job Type'|$title=='Job Board'|$title=='Job Applied'|$title=='User Specification'|$title=='Topping'){ echo 'style="display: block;"'; } ?>>
 				
-				<li class="menu-item <?php if($title=='User Specification'){ echo 'active'; } ?>">
+	        <li class="menu-item <?php if($title=='User Specification'){ echo 'active'; } ?>">
                     <a href="<?php echo base_url('admin/user-specification'); ?>" class=' menu-link'>
                         <span class="menu-label">
                             <span class="menu-name">Attribute</span>
@@ -408,9 +369,19 @@
                         </span>
                     </a>
                 </li>
+                
+                <li class="menu-item <?php if($title=='Topping'){ echo 'active'; } ?>">
+                    <a href="<?php echo base_url('admin/topping'); ?>" class=' menu-link'>
+                        <span class="menu-label">
+                            <span class="menu-name">Topping</span>
+                        </span>
+                        <span class="menu-icon">
+                            <i class="fa fa-cogs" aria-hidden="true"></i>
+                        </span>
+                    </a>
+                </li>
 				
-				<li class="menu-item <?php if($title=='Store Delivery Charges'){ echo 'active'; } ?>">
-				
+	        <li class="menu-item <?php if($title=='Store Delivery Charges'){ echo 'active'; } ?>">	
                     <a href="<?php echo base_url('admin/storeDeliveryCharges'); ?>" class=' menu-link'>
                         <span class="menu-label">
                             <span class="menu-name">Store Delivery Charges</span>
@@ -421,7 +392,7 @@
                     </a>
                 </li>
 				
-				<li class="menu-item <?php if($title=='Restaurant Delivery Charges'){ echo 'active'; } ?>">
+		<li class="menu-item <?php if($title=='Restaurant Delivery Charges'){ echo 'active'; } ?>">
                     <a href='<?php echo base_url('admin/restaurantDeliveryCharges'); ?>' class=' menu-link'>
                         <span class="menu-label">
                             <span class="menu-name">Restaurant Delivery Charges</span>

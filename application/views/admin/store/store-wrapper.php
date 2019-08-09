@@ -17,16 +17,15 @@
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Store Name</th>
-                        <th>Description</th>
                         <th>Image</th>
-                        <th>Status</th>
-						
+                        <th>Store Name</th>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>City</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-
                     <?php
                     if (!empty($stores)) {
                         $i = 1;
@@ -34,40 +33,18 @@
                             ?>
                             <tr>
                                 <td><?php echo $i; ?></td>
-                                <td><?php echo $store['store_name']; ?></td>
+                                <td><a href="<?php echo base_url('admin/editStore/' . $store['store_id']); ?>"><img height="100" width="100" src="<?php echo base_url('uploads/store/' . $store['image_url']); ?>"/></a></td>
+                                <td><a class="btnUrls" href="<?php echo base_url('admin/editStore/' . $store['store_id']); ?>"><?php echo $store['store_name']; ?></a></td>
+                                <td><?php echo $store['category_name']; ?></td>
                                 <td><?php echo $store['description']; ?></td>
-                                <td><img height="100" width="100" src="<?php echo base_url('uploads/store/' . $store['image_url']); ?>"/></td>
-                                <!--<td><?php //echo $store['is_active']; ?></td>-->
-								<td> 
-								  <label class="cstm-switch">
-                                    <input type="checkbox" id="option-dismiss" <?php if($store['is_status'] == 'Active'){ echo "Checked"; }else{ echo "" ; } ?> name="option" value="<?php if($store['is_status'] == 'Active'){ echo base_url('admin/changeStoreStatusOpenOrClose/' . $store['store_id'] . '/Inactive');}else{ echo base_url('admin/changeStoreStatusOpenOrClose/' . $store['store_id'] . '/Active');} ?>" class="cstm-switch-input">
-                                    <span class="cstm-switch-indicator "></span>
-                                    <span class="cstm-switch-description"><?php if($store['is_status'] == 'Active'){ echo "Open"; }else{echo "Close" ; } ?></span>
-                                  </label>
-								</td>
-                                <td>
-								<?php
-                                    if ($store['is_active'] == 'Active') {
-                                        ?>
-                                        <a href="<?php echo base_url('admin/changeStoreStatus/' . $store['store_id'] . '/Inactive'); ?>" data-toggle="tooltip" data-placement="top" title="Change-Status" class="btn btn-primary btn-sm change-status">Active <i class="fe fe-thumbs-up"></i></a>
-                                        <?php
-                                    } else {
-                                        ?>
-                                        <a href="<?php echo base_url('admin/changeStoreStatus/' . $store['store_id'] . '/Active'); ?>" data-toggle="tooltip" data-placement="top" title="Change-Status" class="btn btn-primary btn-sm change-status">Inactive <i class="fe fe-thumbs-down"></i></a>
-                                            <?php
-                                        }
-                                        ?>
-                                    <a href="<?php echo base_url('admin/addStore/' . $store['store_id']); ?>" data-toggle="tooltip" data-placement="top" title="Edit Store" class="btn btn-success btn-sm">Edit <i class="fe fe-edit"></i></a>
-                                    
-                                </td>
-
+                                <td><?php echo $store['city']; ?></td>	
+                                <td><a href="<?php echo base_url('admin/editStore/' . $store['store_id']); ?>" data-toggle="tooltip" data-placement="top" title="Edit Store" class="btn btn-success btn-sm"> Edit <i class="fe fe-edit"></i></a></td>
                             </tr>
                             <?php
                             $i++;
                         }
                     }
                     ?>
-
                 </tbody>
             </table>
         </div>

@@ -10,14 +10,14 @@ var Event = function () {
         this.changeState();
         this.changeCity();
         this.changeLanguage();
-		this.changeStatusOpenOrClose();
+        this.changeStatusOpenOrClose();
         this.delete();
         this.jobtype();
-		this.getGeoLocation();
-		this.deleteImage();
+        this.getGeoLocation();
+        this.deleteImage();
         this.addRow();
         this.deleteRow();
-		this.courierWrapper();
+        this.courierWrapper();
         this.doUpdateOrderStatus();
         this.getCourierList();
         this.doAllotOrder();
@@ -27,6 +27,7 @@ var Event = function () {
         this.outForDelivery();
         this.itemRecieved();
         this.changeCourierStatus();
+<<<<<<< HEAD
 		this.commonFormPassword();
 		this.getLiveTracking();
 		this.forgotPassword();
@@ -35,6 +36,23 @@ var Event = function () {
         this.restaurantAddress();
         this.userAddress();
         this.updateOrderStatus();
+=======
+        this.commonFormPassword();
+        this.getLiveTracking();
+        this.forgotPassword();
+        this.updateForgotPassword();
+        this.storeWrapper();
+        this.deliveryCharge();
+        this.editProductWrapper();
+        this.productFileUploadForm();
+        this.restaurantWrapper();
+        this.bulkAction();
+        this.editMenuWrapper();
+        this.storeWrapperCommonForm();
+        this.storeWrapperImageCommonForm();
+        this.restaurantWrapperCommonForm();
+        this.restaurantWrapperImageCommonForm();
+>>>>>>> a811c12bce5dab1cb573e729817230853cc40c85
     };
     
     this.loader=function(){
@@ -169,6 +187,19 @@ var Event = function () {
     this.changeStatus = function () {
         $(document).on('click', '.change-status', function (e) {
             e.preventDefault();
+            var cls = $(this).children("i").attr("class");
+            
+            if(cls == "fe fe-thumbs-down"){
+                $(this).html("Active <i class='fe fe-thumbs-up'></i>");
+                if($(this).parent("td").prev("td").html() == "Inactive") {
+                $(this).parent("td").prev("td").html("Active");
+            }
+            }else{
+                $(this).html("Inactive <i class='fe fe-thumbs-down'></i>");
+                if($(this).parent("td").prev("td").html() == "Active") {
+                $(this).parent("td").prev("td").html("Inactive");
+            }
+            }
             var url = $(this).attr("href");
             $.post(url, function (out) {
                 if (out.result === 1) {
@@ -178,7 +209,7 @@ var Event = function () {
         });
     };
 	
-	this.changeStatusOpenOrClose = function () {
+    this.changeStatusOpenOrClose = function () {
         $(document).on('click', '.cstm-switch-input', function (e) {
             e.preventDefault();
             var url = $(this).attr("value");
@@ -640,6 +671,7 @@ var Event = function () {
             });
             
         });
+<<<<<<< HEAD
     };
 	this.address = function()
         {
@@ -685,9 +717,405 @@ var Event = function () {
                 });
             });
         };
+=======
+    }
+    
+    this.storeWrapper = function () {
+        $(document).ready(function () {
+            var url = '';
+            if ($('.storetabs').hasClass('active')) {
+                url = $('.storetabs').attr('href');
+            }
+>>>>>>> a811c12bce5dab1cb573e729817230853cc40c85
 
-	 
-	 
+            $.post(url, '', function (out) {
+                if (out.result === 1) {
+                    $('#store-wrapper').html(out.store_content_wrapper);
+                }
+            });
+        });
+        $(document).on('click', '.storetabs', function (evt) {
+            evt.preventDefault();
+            $('.storetabs').removeClass('active');
+            var url = $(this).attr('href');
+            $(this).addClass('active');
+            $.post(url, '', function (out) {
+                if (out.result === 1) {
+                    $('#store-wrapper').html(out.store_content_wrapper);
+                    $('#example').DataTable({
+                        responsive: true,
+                        destroy: true
+                    });
+                }
+            });
+        });
+        
+        $(document).on('click', '.storetabs-edit', function (evt) {
+            evt.preventDefault();
+//            $('.storetabs').removeClass('active');
+            var url = $(this).attr('href');
+//            $(this).addClass('active');
+            $.post(url, '', function (out) {
+                if (out.result === 1) {
+                    $('#store-wrapper').html(out.store_content_wrapper);
+                    $('#example').DataTable({
+                        responsive: true,
+                        destroy: true
+                    });
+                }
+            });
+        });
+        
+    };
+
+    this.deliveryCharge = function () {
+        $("#off").ready(function () {
+            $("#chargeapply").hide();
+        });
+        $(document).on('click', '#on', function () {
+            $("#chargeapply").show();
+        });
+        $(document).on('click', '#off', function () {
+            $("#chargeapply").hide();
+            $("#custombox").hide();
+        });
+        $("#default").ready(function () {
+            $("#custombox").hide();
+        });
+        $(document).on('click', '#custom', function () {
+            $("#custombox").show();
+        });
+        $(document).on('click', '#default', function () {
+            $("#custombox").hide();
+        });
+    };
+
+    this.editProductWrapper = function () {
+
+        $(document).on('click', '.editProduct', function (evt) {
+            $('#myModal').modal('show');
+            var url = $(this).attr('href');
+            $.post(url, '', function (out) {
+                if (out.result === 1) {
+                    $('#edit_product_wrapper').html(out.edit_product_wrapper);
+                }
+            });
+        });
+    }
+
+    this.productFileUploadForm = function () {
+        $(document).on('submit', '#file-import-form', function (evt) {
+            evt.preventDefault();
+
+            $(".loader").fadeIn("slow");
+            alert($(this).attr("action"));
+            $.ajax({
+                url: $(this).attr("action"),
+                type: "post",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (out) {
+                    $(".loader").fadeOut("slow");
+                    $(".form-group > .error").remove();
+                    
+                    if (out.result === 0) {
+                        
+                        for (var i in out.errors) {
+                            $("#error_msgs").append('<span class="error">' + out.errors[i] + '</span>');
+//                            $("#" + i).parents(".form-group").append('<span class="error">' + out.errors[i] + '</span>');
+                            $("#" + i).focus();
+                        }
+                    }
+                    if (out.result === -1) {
+                        var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                        $("#error_msg").removeClass('alert-warning alert-success').addClass('alert alert-danger alert-dismissable').show();
+                        $("#error_msg").html(message + out.msg);
+                        $("#error_msg").fadeOut(2000);
+                        if (out.url) {
+                            window.location.href = out.url;
+                        }
+                    }
+                    if (out.result === 1) {
+                        window.location.href = out.url;
+                    }
+                }
+            });
+        });
+    };
+
+    this.restaurantWrapper = function () {
+        $(document).ready(function () {
+            var url = '';
+            if ($('.restauranttabs').hasClass('active')) {
+                url = $('.restauranttabs').attr('href');
+            }
+            $.post(url, '', function (out) {
+                if (out.result === 1) {
+                    $('#restaurant-wrapper').html(out.restaurant_content_wrapper);
+                }
+            });
+        });
+        $(document).on('click', '.restauranttabs', function (evt) {
+            evt.preventDefault();
+            $('.restauranttabs').removeClass('active');
+            var url = $(this).attr('href');
+            $(this).addClass('active');
+            $.post(url, '', function (out) {
+                if (out.result === 1) {
+                    $('#restaurant-wrapper').html(out.restaurant_content_wrapper);
+                    $('#example').DataTable({
+                        responsive: true,
+                        destroy: true
+                    });
+                }
+            });
+        });
+        
+        $(document).on('click', '.restauranttabs_edit', function (evt) {
+            evt.preventDefault();
+//            $('.restauranttabs').removeClass('active');
+            var url = $(this).attr('href');
+//            $(this).addClass('active');
+            $.post(url, '', function (out) {
+                if (out.result === 1) {
+                    $('#restaurant-wrapper').html(out.restaurant_content_wrapper);
+                    $('#example').DataTable({
+                        responsive: true,
+                        destroy: true
+                    });
+                }
+            });
+        });
+    };
+
+    this.bulkAction = function () {
+        $(document).on('change', '#bulk_actions', function (evt) {
+            evt.preventDefault();
+            var value = $(this).val();
+            var url = ($(this).attr('data-url'))+value;
+            alert(url);
+            var checkboxValues = [];
+            $(':checkbox:checked').each(function () {
+                checkboxValues.push($(this).data('id'));
+            });
+
+            $.post(url,{product_ids:checkboxValues,value:value},function(out){
+               alert(out); 
+            });
+            
+        });
+    };
+    
+    this.editMenuWrapper = function () {
+        $(document).on('click', '.editMenu', function () {
+            $('#editMenuModel').modal('show');
+            var url = $(this).attr('href');
+            $.post(url, '', function (out) {
+                if (out.result === 1) {
+                    $('#edit_menu_wrapper').html(out.edit_menu_wrapper);
+                }
+            });
+        });
+    };
+    
+    this.storeWrapperCommonForm = function () {
+        $(document).on('submit', '#store-wrapper-common-form', function (evt) {
+            evt.preventDefault();
+            $(".loader").fadeIn("slow");
+            var url = $(this).attr("action");
+            
+            var postdata = $(this).serialize();
+            $.post(url, postdata, function (out) {
+                $(".loader").fadeOut("slow");
+                $(".form-group > .error").remove();
+                if (out.result === 0) {
+                    for (var i in out.errors) {
+                        $("#" + i).parents(".form-group").append('<span class="error">' + out.errors[i] + '</span>');
+                        $("#" + i).focus();
+                    }
+                }
+                if (out.result === -1) {
+                    var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    $("#error_msg").removeClass('alert-danger alert-success').addClass('alert alert-danger alert-dismissable').show();
+                    $("#error_msg").html(message + out.msg);
+                    $("#error_msg").fadeOut(2000);
+                }
+                if (out.result === 1) {
+                    var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    $("#error_msg").removeClass('alert-danger alert-danger').addClass('alert alert-success alert-dismissable').show();
+                    $("#error_msg").html(message + out.msg);
+                    $("#error_msg").fadeOut(2000);
+                    
+                    var active_url=$(".storetabs.active").attr('href');
+                    
+                    $.post(active_url, '', function (out) {
+                        if (out.result === 1) {
+                            $('#store-wrapper').html(out.store_content_wrapper);
+                            $('#example').DataTable({
+                                responsive: true,
+                                destroy: true
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    };
+    
+    this.storeWrapperImageCommonForm = function () {
+        $(document).on('submit', '#store-wrapper-image-form', function (evt) {
+            evt.preventDefault();
+            $(".loader").fadeIn("slow");
+            $.ajax({
+                url: $(this).attr("action"),
+                type: "post",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (out) {
+                    $(".loader").fadeOut("slow");
+                    $(".form-group > .error").remove();
+                    if (out.result === 0) {
+                        for (var i in out.errors) {
+                            $("#" + i).parents(".form-group").append('<span class="error">' + out.errors[i] + '</span>');
+                            $("#" + i).focus();
+                        }
+                    }
+                    if (out.result === -1) {
+                        var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                        $("#error_msg").removeClass('alert-warning alert-success').addClass('alert alert-danger alert-dismissable').show();
+                        $("#error_msg").html(message + out.msg);
+                        $("#error_msg").fadeOut(2000);
+                        if (out.url) {
+                            window.location.href = out.url;
+                        }
+                    }
+                    if (out.result === 1) {
+                        var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                        $("#error_msg").removeClass('alert-danger alert-danger').addClass('alert alert-success alert-dismissable').show();
+                        $("#error_msg").html(message + out.msg);
+                        $("#error_msg").fadeOut(2000);
+                        window.setTimeout(function () {
+                            window.location.href = out.url;
+                        }, 1000);
+                        
+                        var active_url=$(".storetabs.active").attr('href');
+                        
+                        $.post(active_url, '', function (out) {
+                            if (out.result === 1) {
+                                
+                                $('#store-wrapper').html(out.store_content_wrapper);
+                                $('#example').DataTable({
+                                    responsive: true,
+                                    destroy: true
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    };
+    
+    this.restaurantWrapperCommonForm = function () {
+        $(document).on('submit', '#restaurant-wrapper-common-form', function (evt) {
+            evt.preventDefault();
+            $(".loader").fadeIn("slow");
+            var url = $(this).attr("action");
+            
+            var postdata = $(this).serialize();
+            $.post(url, postdata, function (out) {
+                $(".loader").fadeOut("slow");
+                $(".form-group > .error").remove();
+                if (out.result === 0) {
+                    for (var i in out.errors) {
+                        $("#" + i).parents(".form-group").append('<span class="error">' + out.errors[i] + '</span>');
+                        $("#" + i).focus();
+                    }
+                }
+                if (out.result === -1) {
+                    var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    $("#error_msg").removeClass('alert-danger alert-success').addClass('alert alert-danger alert-dismissable').show();
+                    $("#error_msg").html(message + out.msg);
+                    $("#error_msg").fadeOut(2000);
+                }
+                if (out.result === 1) {
+                    var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    $("#error_msg").removeClass('alert-danger alert-danger').addClass('alert alert-success alert-dismissable').show();
+                    $("#error_msg").html(message + out.msg);
+                    $("#error_msg").fadeOut(2000);
+                    
+                    var active_url=$(".restauranttabs.active").attr('href');
+                    
+                    $.post(active_url, '', function (out) {
+                        if (out.result === 1) {
+                            $('#restaurant-wrapper').html(out.restaurant_content_wrapper);
+                            $('#example').DataTable({
+                                responsive: true,
+                                destroy: true
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    };
+    
+    this.restaurantWrapperImageCommonForm = function () {
+        $(document).on('submit', '#restaurant-wrapper-image-form', function (evt) {
+            evt.preventDefault();
+            $(".loader").fadeIn("slow");
+            
+            $.ajax({
+                url: $(this).attr("action"),
+                type: "post",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (out) {
+                    $(".loader").fadeOut("slow");
+                    $(".form-group > .error").remove();
+                    if (out.result === 0) {
+                        for (var i in out.errors) {
+                            $("#" + i).parents(".form-group").append('<span class="error">' + out.errors[i] + '</span>');
+                            $("#" + i).focus();
+                        }
+                    }
+                    if (out.result === -1) {
+                        var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                        $("#error_msg").removeClass('alert-warning alert-success').addClass('alert alert-danger alert-dismissable').show();
+                        $("#error_msg").html(message + out.msg);
+                        $("#error_msg").fadeOut(2000);
+                        if (out.url) {
+                            window.location.href = out.url;
+                        }
+                    }
+                    if (out.result === 1) {
+                        var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                        $("#error_msg").removeClass('alert-danger alert-danger').addClass('alert alert-success alert-dismissable').show();
+                        $("#error_msg").html(message + out.msg);
+                        $("#error_msg").fadeOut(2000);
+                        window.setTimeout(function () {
+                            window.location.href = out.url;
+                        }, 1000);
+                        
+                        var active_url=$(".restauranttabs.active").attr('href');
+                    
+                        $.post(active_url, '', function (out) {
+                            if (out.result === 1) {
+                                $('#restaurant-wrapper').html(out.restaurant_content_wrapper);
+                                $('#example').DataTable({
+                                    responsive: true,
+                                    destroy: true
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    };
     
     this.__construct();
 };
