@@ -129,10 +129,18 @@ $route['admin/adminStore'] = "admin/adminStore/index";
 $route['admin/get-store-wrapper'] = "admin/adminStore/get-store-wrapper";
 $route['admin/changeStoreStatus/(:any)/(:any)'] = "admin/adminStore/changeStoreStatus/$1/$2";
 $route['admin/changeStoreStatusOpenOrClose/(:any)/(:any)'] = "admin/adminStore/changeStoreStatusOpenOrClose/$1/$2";
+$route['admin/changeStoreDeliveryChargeOnOrOff/(:any)/(:any)'] = "admin/adminStore/changeStoreDeliveryChargeOnOrOff/$1/$2";
+$route['admin/StoreDeliveryChargeType/(:any)/(:any)'] = "admin/adminStore/StoreDeliveryChargeType/$1/$2";
 $route['admin/addStore'] = "admin/adminStore/addStore";
-$route['admin/addStore/(:any)'] = "admin/adminStore/addStore/$1";
+$route['admin/editStore/(:any)'] = "admin/adminStore/editStore/$1";
+//$route['admin/bydefault-warpper'] = "admin/adminStore/get_bydefault_wrapper/$1";
 $route['admin/doAddStore'] = "admin/adminStore/doAddStore";
 $route['admin/doEditStore/(:any)'] = "admin/adminStore/doEditStore/$1";
+$route['admin/doEditStoreInfo/(:any)'] = "admin/adminStore/doEditStoreInfo/$1";
+$route['admin/doEditStoreAddress/(:any)'] = "admin/adminStore/doEditStoreAddress/$1";
+$route['admin/doEditStoreOperation/(:any)'] = "admin/adminStore/doEditStoreOperation/$1";
+$route['admin/doEditStoreDeliveryTax/(:any)'] = "admin/adminStore/doEditStoreDeliveryTax/$1";
+$route['admin/doEditStoreBank/(:any)'] = "admin/adminStore/doEditStoreBank/$1";
 
 //Admin store deliver charges
 $route['admin/storeDeliveryCharges'] = "admin/adminStore/storeDeliveryCharges";
@@ -174,22 +182,21 @@ $route['admin/adminProduct/(:any)/(:any)'] = "admin/adminProduct/index/$1/$2";
 $route['admin/get-product-wrapper/(:any)/(:any)'] = "admin/adminProduct/get-product-wrapper/$1/$2";
 $route['admin/add-product/(:any)/(:any)'] = "admin/adminProduct/add-product/$1/$2";
 $route['admin/add-product/(:any)/(:any)/(:any)'] = "admin/adminProduct/add-product/$1/$2/$3";
-$route['admin/doAddProduct/(:any)/(:any)'] = "admin/adminProduct/doAddProduct/$1/$2";
-$route['admin/doEditProduct/(:any)/(:any)/(:any)'] = "admin/adminProduct/doEditProduct/$1/$2/$3";
+$route['admin/doAddProduct'] = "admin/adminProduct/doAddProduct";
 $route['admin/changeProductStatus/(:any)/(:any)'] = "admin/adminProduct/changeProductStatus/$1/$2";
 $route['admin/removeProductGroupMapping/(:any)'] = "admin/adminProduct/removeProductGroupMapping/$1";
-
+$route['admin/adminProduct/(:any)'] = "admin/adminProduct/manage_product_wrapper/$1";
 
 //Admin Product Sku
-$route['admin/view-product-sku/(:any)/(:any)/(:any)'] = "admin/adminProduct/view-product-sku/$1/$2/$3";
-$route['admin/get-product-sku-wrapper/(:any)/(:any)/(:any)'] = "admin/adminProduct/get-product-sku-wrapper/$1/$2/$3";
-$route['admin/add-product-sku/(:any)/(:any)/(:any)'] = "admin/adminProduct/add-product-sku/$1/$2/$3";
-$route['admin/doAddProductSku/(:any)/(:any)/(:any)'] = "admin/adminProduct/doAddProductSku/$1/$2/$3";
-$route['admin/add-product-sku/(:any)/(:any)/(:any)/(:any)'] = "admin/adminProduct/add-product-sku/$1/$2/$3/$4";
-$route['admin/get-product-sku-image-wrapper/(:any)'] = "admin/adminProduct/get-product-sku-image-wrapper/$1";
-$route['admin/doDeleteProductSkuImage/(:any)'] = "admin/adminProduct/doDeleteProductSkuImage/$1";
-$route['admin/doEditProductSku/(:any)/(:any)/(:any)/(:any)'] = "admin/adminProduct/doEditProductSku/$1/$2/$3/$4";
-$route['admin/changeProductSkuStatus/(:any)/(:any)'] = "admin/adminProduct/changeProductSkuStatus/$1/$2";
+// $route['admin/view-product-sku/(:any)/(:any)/(:any)'] = "admin/adminProduct/view-product-sku/$1/$2/$3";
+// $route['admin/get-product-sku-wrapper/(:any)/(:any)/(:any)'] = "admin/adminProduct/get-product-sku-wrapper/$1/$2/$3";
+// $route['admin/add-product-sku/(:any)/(:any)/(:any)'] = "admin/adminProduct/add-product-sku/$1/$2/$3";
+// $route['admin/doAddProductSku/(:any)/(:any)/(:any)'] = "admin/adminProduct/doAddProductSku/$1/$2/$3";
+// $route['admin/add-product-sku/(:any)/(:any)/(:any)/(:any)'] = "admin/adminProduct/add-product-sku/$1/$2/$3/$4";
+// $route['admin/get-product-sku-image-wrapper/(:any)'] = "admin/adminProduct/get-product-sku-image-wrapper/$1";
+// $route['admin/doDeleteProductSkuImage/(:any)'] = "admin/adminProduct/doDeleteProductSkuImage/$1";
+// $route['admin/doEditProductSku/(:any)/(:any)/(:any)/(:any)'] = "admin/adminProduct/doEditProductSku/$1/$2/$3/$4";
+// $route['admin/changeProductSkuStatus/(:any)/(:any)'] = "admin/adminProduct/changeProductSkuStatus/$1/$2";
 
 //language 
 $route['admin/language'] = "admin/language/index";
@@ -253,8 +260,10 @@ $route['admin/adminRestaurant'] = "admin/adminRestaurant/index";
 $route['admin/get-admin-restaurant-wrapper'] = "admin/adminRestaurant/get-restaurant-wrapper";
 $route['admin/changeAdminRestaurantStatus/(:any)/(:any)'] = "admin/adminRestaurant/changeAdminRestaurantStatus/$1/$2";
 $route['admin/changeAdminRestaurantStatusOpenOrClose/(:any)/(:any)'] = "admin/adminRestaurant/changeAdminRestaurantStatusOpenOrClose/$1/$2";
+$route['admin/changeAdminRestaurantDeliveryChargeOnOrOff/(:any)/(:any)'] = "admin/adminRestaurant/changeAdminRestaurantDeliveryChargeOnOrOff/$1/$2";
+$route['admin/changeAdminRestaurantDeliveryChargeType/(:any)/(:any)'] = "admin/adminRestaurant/changeAdminRestaurantDeliveryChargeType/$1/$2";
 $route['admin/addRestaurant'] = "admin/adminRestaurant/addRestaurant";
-$route['admin/addRestaurant/(:any)'] = "admin/adminRestaurant/addRestaurant/$1";
+$route['admin/editRestaurant/(:any)'] = "admin/adminRestaurant/editRestaurant/$1";
 $route['partner/addRestaurant/(:any)'] = "admin/adminRestaurant/addRestaurant/$1";
 $route['admin/doAddRestaurant'] = "admin/adminRestaurant/doAddRestaurant";
 $route['admin/doEditRestaurant/(:any)'] = "admin/adminRestaurant/doEditRestaurant/$1";

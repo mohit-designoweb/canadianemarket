@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['stripe_key'] = 'pk_test_vJ4le6Wr7z1Xz57l4QzJLBxz00ttl0Q6bf';
 $config['stripe_secret'] = 'sk_test_m6ralmqBsA6ced5QaIyizpv400mdYo3UVO';
-$config['base_url'] = 'http://designoweb.work/canadianemarket';
+$config['base_url'] = 'http://localhost/canadianemarket/';
 
 
 /*
