@@ -275,7 +275,7 @@ var Event = function () {
                     }
                 }
             });
-        });
+        })
 
         $(document).on('click', '#imgFileUpload', function (evt) {
             evt.preventDefault();

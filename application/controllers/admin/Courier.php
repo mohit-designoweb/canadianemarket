@@ -6,7 +6,7 @@ class Courier extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model(['admin_model','courier_model']);
+        $this->load->model(['admin_model', 'courier_model']);
     }
 
     private function isLogin() {
@@ -17,17 +17,16 @@ class Courier extends CI_Controller {
         $email = $this->session->userdata('email_courier');
         return $this->admin_model->getUserdata('courier', $email);
     }
-	 public function getAllCourierData()
-    {
+
+    public function getAllCourierData() {
         $data['user'] = $this->getUserData();
         $data['is_courier'] = $this->session->userdata('is_courier');
         $restaurant_order_id = $data['restaurant_order_id'] = $this->courier_model->getRestaurantOrderDetail($data['user']['courier_id']);
-        $i=0;
-        $getRestaurantUserDetail =[];
-        foreach($restaurant_order_id as $order_id)
-        {
-        $getRestaurantUserDetail[$i] = $this->courier_model->getRestaurantUserDetail($order_id);
-        $i++;
+        $i = 0;
+        $getRestaurantUserDetail = [];
+        foreach ($restaurant_order_id as $order_id) {
+            $getRestaurantUserDetail[$i] = $this->courier_model->getRestaurantUserDetail($order_id);
+            $i++;
         }
         return $getRestaurantUserDetail;
     }
@@ -41,11 +40,11 @@ class Courier extends CI_Controller {
     }
 
     public function checkLogin() {
-		
+
         $this->output->set_content_type('application/json');
         $this->form_validation->set_rules('email', 'Email', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
-		
+
         if ($this->form_validation->run() === FALSE) {
             $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
             return FALSE;
@@ -62,14 +61,13 @@ class Courier extends CI_Controller {
         }
     }
 
-   
-	 public function dashboard() {
+    public function dashboard() {
         if (!$this->isLogin()) {
             redirect(base_url('courier'));
         }
         $data['title'] = 'Dashboard';
         $data['user'] = $this->getUserData();
-        $data['getRestaurantUserDetail']=$this->getAllCourierData();
+        $data['getRestaurantUserDetail'] = $this->getAllCourierData();
         $this->load->view('admin/commons/header', $data);
         $this->load->view('admin/commons/courier-sidebar', $data);
         $this->load->view('admin/dashboard');
@@ -116,7 +114,7 @@ class Courier extends CI_Controller {
         $data['country_code'] = $this->admin_model->getCountryCode();
         $data['user_detail'] = $this->admin_model->getUserDetail('courier', $email);
         $this->load->view('admin/commons/header', $data);
-		$this->load->view('admin/commons/courier-sidebar', $data);
+        $this->load->view('admin/commons/courier-sidebar', $data);
         $this->load->view('admin/courier-profile');
         $this->load->view('admin/commons/footer');
     }
@@ -147,7 +145,7 @@ class Courier extends CI_Controller {
             $user = $this->admin_model->getUserDetail('courier', $email);
             $image_url = $user['image_url'];
         }
-         if (!empty($_FILES['dl_image_url']['name'])) {
+        if (!empty($_FILES['dl_image_url']['name'])) {
             $dl_image_url = $this->doUploadDrivingLicenceLImage();
             if (!$image_url) {
                 $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->session->userdata('error')]));
@@ -167,7 +165,7 @@ class Courier extends CI_Controller {
             return FALSE;
         }
     }
-    
+
     public function doUploadProfileImage() {
         $config = array(
             'upload_path' => "./uploads/profile_images/",
@@ -184,7 +182,8 @@ class Courier extends CI_Controller {
             return 0;
         }
     }
-     public function doUploadDrivingLicenceLImage() {
+
+    public function doUploadDrivingLicenceLImage() {
         $config = array(
             'upload_path' => "./uploads/courier_driving_licence/",
             'allowed_types' => "jpeg|jpg|png",
@@ -206,7 +205,8 @@ class Courier extends CI_Controller {
         $this->session->unset_userdata('is_courier');
         redirect(base_url('courier'));
     }
-	 public function get_notification() {
+
+    public function get_notification() {
         $this->output->set_content_type('application/json');
         $data['user'] = $this->getUserData();
         $data['is_courier'] = $this->session->userdata('is_courier');
@@ -293,10 +293,10 @@ class Courier extends CI_Controller {
         $this->load->view('admin/commons/footer');
     }
 
-    public function get_courier_wrapper($order_id) { 
+    public function get_courier_wrapper($order_id) {
         $this->output->set_content_type('applicatiion/json');
         $data['courierOrderMappingDetail'] = $mappingDetail = $this->courier_model->getOrderDateTime($order_id);
-        $data['order_detail1'] =$order_detail1 = $this->courier_model->getOrderDetailById($order_id);
+        $data['order_detail1'] = $order_detail1 = $this->courier_model->getOrderDetailById($order_id);
         if ($mappingDetail['order_accepted_status'] == 'No') {
             $courier_order_wrapper = $this->load->view('admin/courier-order-management/includes/courier-order-accept-wrapper', $data, TRUE);
             $this->output->set_output(json_encode(['result' => 1, 'courier_order_wrapper' => $courier_order_wrapper]));
@@ -318,12 +318,12 @@ class Courier extends CI_Controller {
         $this->output->set_content_type('application/json');
         $courier = $this->getUserData();
         if ($status == 'Accepted') {
-            $data['order_id']=$restaurant_order_id;
+            $data['order_id'] = $restaurant_order_id;
             $this->courier_model->updateOrderAcceptedStatus($mapping_id, 'Yes');
             $this->courier_model->restaurantOrderAcceptedStatus($restaurant_order_id, 'Accepted', $courier['courier_id']);
             $this->courier_model->updateCourierAvailableStatus($courier['courier_id'], 'No');
-            $courier_order_wrapper = $this->load->view('admin/courier-order-management/includes/courier-waiting-wrapper',$data, TRUE);
-            $this->output->set_output(json_encode(['result' => 1,'courier_order_wrapper'=>$courier_order_wrapper]));
+            $courier_order_wrapper = $this->load->view('admin/courier-order-management/includes/courier-waiting-wrapper', $data, TRUE);
+            $this->output->set_output(json_encode(['result' => 1, 'courier_order_wrapper' => $courier_order_wrapper]));
             return FALSE;
         } else if ($status == 'Rejected') {
             $this->courier_model->restaurantOrderAcceptedStatus($restaurant_order_id, 'Rejected', $courier['courier_id']);
@@ -332,30 +332,30 @@ class Courier extends CI_Controller {
             return FALSE;
         }
     }
-    
-    public function check_for_accept_order($order_id){
+
+    public function check_for_accept_order($order_id) {
         $this->output->set_content_type('application/json');
-        $result=$this->courier_model->checkOrderStatus($order_id);
-        $data['order_id']=$order_id;
+        $result = $this->courier_model->checkOrderStatus($order_id);
+        $data['order_id'] = $order_id;
         $data['courierOrderMappingDetail'] = $mappingDetail = $this->courier_model->getOrderDateTime($order_id);
-        if($result){
-            $courier_order_wrapper = $this->load->view('admin/courier-order-management/includes/courier-item-receive-wrapper',$data, TRUE);
-            $this->output->set_output(json_encode(['result' => 1,'courier_order_wrapper'=>$courier_order_wrapper]));
+        if ($result) {
+            $courier_order_wrapper = $this->load->view('admin/courier-order-management/includes/courier-item-receive-wrapper', $data, TRUE);
+            $this->output->set_output(json_encode(['result' => 1, 'courier_order_wrapper' => $courier_order_wrapper]));
             return FALSE;
-        }else{
+        } else {
             $this->output->set_output(json_encode(['result' => -1]));
             return FALSE;
         }
     }
-    
-    public function updateOrderReceivedStatus($mapping_id,$order_id) {
+
+    public function updateOrderReceivedStatus($mapping_id, $order_id) {
         $this->output->set_content_type('application/json');
         $result = $this->courier_model->updateOrderReceivedStatus($mapping_id);
         $data['courierOrderMappingDetail'] = $this->courier_model->getOrderDateTime($order_id);
-        $data['order_detail1'] =$order_detail1 = $this->courier_model->getOrderDetailById($order_id);
+        $data['order_detail1'] = $order_detail1 = $this->courier_model->getOrderDetailById($order_id);
         if ($result) {
-            $courier_order_wrapper = $this->load->view('admin/courier-order-management/includes/courier-order-delivered-wrapper',$data, TRUE);
-            $this->output->set_output(json_encode(['result' => 1,'courier_order_wrapper'=>$courier_order_wrapper]));
+            $courier_order_wrapper = $this->load->view('admin/courier-order-management/includes/courier-order-delivered-wrapper', $data, TRUE);
+            $this->output->set_output(json_encode(['result' => 1, 'courier_order_wrapper' => $courier_order_wrapper]));
             return FALSE;
         }
     }
@@ -370,15 +370,15 @@ class Courier extends CI_Controller {
         $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('courier/view-order')]));
         return FALSE;
     }
-	
-	 public function forgot_password() {
-        
+
+    public function forgot_password() {
+
         $this->load->view('admin/forgot_password_courier');
     }
-	
-	 public function forgot_password_checked(){
+
+    public function forgot_password_checked() {
         $this->output->set_content_type('application/json');
-        
+
         $this->form_validation->set_rules('email', 'Register Email', 'trim|required');
         if ($this->form_validation->run() == FALSE) {
             $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
@@ -386,74 +386,74 @@ class Courier extends CI_Controller {
         }
         $result = $this->admin_model->varify_courier_emailid();
 
-        if(!empty($result)){
-		
-		$str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-		$activationcode = substr(str_shuffle($str), 0, 10);	
-		
-        $this->send_forgot_password_link($result,$activationcode);
+        if (!empty($result)) {
+
+            $str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            $activationcode = substr(str_shuffle($str), 0, 10);
+
+            $this->send_forgot_password_link($result, $activationcode);
             $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Link has been sent on your email ', 'url' => base_url('admin/partner/forgot_password')]));
             return FALSE;
-        }
-        else{
+        } else {
             $this->output->set_output(json_encode(['result' => -1, 'errors' => 'This email id does not exist!']));
             return FALSE;
         }
-        
-    }//end of function 
-    
-    public function send_forgot_password_link($result,$activationcode) {
-    //$result = $result;
-	//$str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    //$activationcode = substr(str_shuffle($str), 0, 10);
-	
-	$getEmailResponse = $this->admin_model->insert_courier_activationcode($activationcode,$result);
-	//if($getEmailResponse){	
-	$config = array(
-	'protocol' => 'smtp',
-	'smtp_host' => 'ssl://smtp.googlemail.com',
-	'smtp_port' => 465,
-	'smtp_user' => 'canadianemarket@gmail.com',
-	'smtp_pass' => 'HappyinGod!2017',
-	'mailtype' => 'html',
-	'charset' => 'utf-8'
-	);
-	$this->email->initialize($config);
-	$this->email->set_mailtype("html");
-	$this->email->set_newline("\r\n");
+    }
 
-	//Email content
-	$htmlContent = "<h3>Dear ".$result['first_name'].",</h3>";
-	$htmlContent.="<div style='padding-top:8px;'>Please click The following link For Update your password..</div>";
-	$htmlContent.= base_url('courier/password-reset/'.$result['courier_id'].'/'.$activationcode)." Click Here!! Set new password!";
-	
-	$this->email->to($result['email']);
-	$this->email->from('canadianemarket@gmail.com','MyWebsite');
-	$this->email->subject('Hey!, '.$result['first_name']." ".$result['last_name'].' your reset password link');
-	$this->email->message($htmlContent);
+//end of function 
 
-	//Send email
-	$this->email->send();
-		
-		return true;
-		}
-		
-	public function password_reset($courier_id,$activationcode){
-		$data['courier_id'] = $courier_id;
-		$checkResponse = $this->admin_model->update_courier_email_status($courier_id,$activationcode);
-		
-		if($checkResponse){
-			$this->load->view('admin/courier_reset_password',$data);
-			
-		}else{
-			echo "This is the Wrong or Expire Activation Code";
-		}
-		
-	}	//end of function 
-	
-	public function update_forgot_password(){
+    public function send_forgot_password_link($result, $activationcode) {
+        //$result = $result;
+        //$str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        //$activationcode = substr(str_shuffle($str), 0, 10);
+
+        $getEmailResponse = $this->admin_model->insert_courier_activationcode($activationcode, $result);
+        //if($getEmailResponse){	
+        $config = array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',
+            'smtp_port' => 465,
+            'smtp_user' => 'canadianemarket@gmail.com',
+            'smtp_pass' => 'HappyinGod!2017',
+            'mailtype' => 'html',
+            'charset' => 'utf-8'
+        );
+        $this->email->initialize($config);
+        $this->email->set_mailtype("html");
+        $this->email->set_newline("\r\n");
+
+        //Email content
+        $htmlContent = "<h3>Dear " . $result['first_name'] . ",</h3>";
+        $htmlContent .= "<div style='padding-top:8px;'>Please click The following link For Update your password..</div>";
+        $htmlContent .= base_url('courier/password-reset/' . $result['courier_id'] . '/' . $activationcode) . " Click Here!! Set new password!";
+
+        $this->email->to($result['email']);
+        $this->email->from('canadianemarket@gmail.com', 'MyWebsite');
+        $this->email->subject('Hey!, ' . $result['first_name'] . " " . $result['last_name'] . ' your reset password link');
+        $this->email->message($htmlContent);
+
+        //Send email
+        $this->email->send();
+
+        return true;
+    }
+
+    public function password_reset($courier_id, $activationcode) {
+        $data['courier_id'] = $courier_id;
+        $checkResponse = $this->admin_model->update_courier_email_status($courier_id, $activationcode);
+
+        if ($checkResponse) {
+            $this->load->view('admin/courier_reset_password', $data);
+        } else {
+            echo "This is the Wrong or Expire Activation Code";
+        }
+    }
+
+//end of function 
+
+    public function update_forgot_password() {
         $this->output->set_content_type('application/json');
-        
+
         $this->form_validation->set_rules('new_password', 'New Password', 'required');
         $this->form_validation->set_rules('conf_password', 'Confirm Password', 'required|matches[new_password]');
         if ($this->form_validation->run() === FALSE) {
@@ -468,8 +468,6 @@ class Courier extends CI_Controller {
             $this->output->set_output(json_encode(['result' => -1, 'msg' => 'Password is not correct']));
             return FALSE;
         }
-        
-    }	
-	
-	
+    }
+
 }

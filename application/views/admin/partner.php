@@ -76,7 +76,7 @@
 
         <script src='<?php echo base_url('public/js/pace.min.js') ?>'></script>
         <script src='<?php echo base_url('public/js/demo.js') ?>'></script>
-        <script src='<?php echo base_url('public/js/event.js') ?>'></script>
+        <script src='<?php echo base_url('public/js/partner.js') ?>'></script>
         <!--page specific scripts for demo-->
 
         <!-- Global site tag (gtag.js) - Google Analytics -->
