@@ -304,7 +304,7 @@ class Store extends CI_Controller {
 
         $data['shop_section_id'] = $shop_section;
 		
-		 $i=0;
+	$i=0;
         foreach($data['products'] as $product){
             $list[$i]['store_name']= $product['store_name'];
             $list[$i]['product_id']= $product['product_id'];
@@ -353,159 +353,150 @@ class Store extends CI_Controller {
         return $product;
     }
 
-    public function product($product_name) {
-		$wishlistProduct = [];
-		$i=0;
+        public function product($product_name) {
+	    $wishlistProduct = [];
+        $i = 0;
         $data['product'] = $product = $this->ecommerce_model->getProductIdByProductName(str_replace('-', ' ', $product_name));
-        $data['product_sku'] = $product_sku = $this->ecommerce_model->getSingleProductSkuByProductId($product['product_id']);
         $data['user_data'] = $this->getDataByUniqueId();
+
+        $data['title'] = 'Store';
+        $relatedProductwishlist = $this->ecommerce_model->getRelatedProductWishlist($data['user_data']['user_id']);
+        foreach ($relatedProductwishlist as $relProWishlist) {
+            $wishlistProduct[$i] = $relProWishlist['product_id'];
+            $i++;
+        }
+
+        $data['relProWishlist'] = $wishlistProduct;
+        $data['related_products'] = $this->ecommerce_model->getRelatedProductByShopSectionId($product['shop_section_id']);
         
-		$data['title'] = 'Store';
-		$relatedProductwishlist = $this->ecommerce_model->getRelatedProductWishlist($data['user_data']['user_id']);
-		foreach($relatedProductwishlist as $relProWishlist)
-		{
-			$wishlistProduct[$i]= $relProWishlist['product_id'];
-			$i++;
-		}
-		/*echo "<pre>";
-		print_r($wishlistProduct);
-		echo "<pre>"; die;*/
-		
-		$data['relProWishlist'] = $wishlistProduct;
-		$data['related_products'] = $this->ecommerce_model->getRelatedProductByShopSectionId($product['shop_section_id']);
         $data['ratings'] = $this->ecommerce_model->getAllRating($product['product_id']);
         $data['review_details'] = $this->ecommerce_model->getStoreReviewByProductId($product['product_id']);
-		//print_r($data['review_details']);exit();
-        $data['countries'] = $this->getFilterCountry();
+
+        $data['countries'] = $this->ecommerce_model->getCountry();
+        $data['cities'] = $this->getCities();
         $this->load->view('front/commons/header', $data);
         $this->load->view('front/product/product');
         $this->load->view('front/commons/footer');
     }
 
-    public function getFilteredProductSku($product_sku_id) {
-        $list = [];
-        $product_sku_mappings = $this->ecommerce_model->getProductSkuMappingByProductSkuId($product_sku_id);
-        foreach ($product_sku_mappings as $mapping) {
-            $list[$mapping['group_id']] = $mapping['group_value'];
-        }
-        return $list;
-    }
+//    public function getFilteredProductSku($product_sku_id) {
+//        $list = [];
+//        $product_sku_mappings = $this->ecommerce_model->getProductSkuMappingByProductSkuId($product_sku_id);
+//        foreach ($product_sku_mappings as $mapping) {
+//            $list[$mapping['group_id']] = $mapping['group_value'];
+//        }
+//        return $list;
+//    }
 
-    public function get_product_detail_wrapper($product_id, $product_sku_id) {
+    public function get_product_detail_wrapper($product_id) {
         $this->output->set_content_type('application/json');
         $data['user_data'] = $user_data = $this->getDataByUniqueId();
         $data['product'] = $this->ecommerce_model->getProductDetailByProductId($product_id);
-         
         $data['wishlist'] = $this->ecommerce_model->getStoreProductWishlist($product_id,$user_data['user_id']);
-        
         $data['average_rating'] = $this->ecommerce_model->getAvarageRating($product_id);
         $data['ratings'] = $this->ecommerce_model->getAllRating($product_id);
-        $data['single_product_sku'] = $product_sku = $this->ecommerce_model->getSingleProductSkuByProductSkuId($product_sku_id);
-        $data['mapping'] = $this->getFilteredProductSku($product_sku_id);
-        $data['product_images'] = $this->ecommerce_model->getProductImagesByProductSkuId($product_sku_id);
-        $data['specification'] = $specification = $this->ecommerce_model->getSpecificationByProductId($product_id);
-        $data['product_skus'] = $product_skus = $this->ecommerce_model->getProductSkuByProductId($product_id);
-        $data['sku_lists'] = $this->getProductSku($product_skus);
+        $data['product_mappings'] = $this->ecommerce_model->getProductSkuMappingByProductSkuId($product_id);
+        $data['product_images'] = $this->ecommerce_model->getProductImagesByProductSkuId($product_id);
         $content_wrapper = $this->load->view('front/product/product-detail-wrapper', $data, true);
         $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
         return FALSE;
     }
 
-    public function getProductSku($product_skus) {
-        $lists = [];
-        $i = 0;
-        foreach ($product_skus as $product_sku) {
-            $products = $this->ecommerce_model->getProductSkuMappingByProductSkuId($product_sku['product_sku_id']);
-            foreach ($products as $product) {
-                $lists[$i][$product['group_id']] = $product['group_value'];
-                $i++;
-            }
-        }
-        $skus = [];
-        foreach ($lists as $values) {
-            foreach ($values as $key => $value) {
-                if (!empty($skus[$key])) {
-                    if (array_key_exists($key, $skus)) {
-                        $value .= ',' . $skus[$key];
-                        $skus[$key] = $value;
-                    }
-                } else {
-                    $skus[$key] = $value;
-                }
-            }
-        }
-        $sku_keys = array_keys($skus);
-        $new_lists = [];
-
-        foreach ($sku_keys as $sku_key) {
-            $new_lists[$sku_key] = explode(',', $skus[$sku_key]);
-        }
-        $sku_lists = [];
-        $i = 0;
-        foreach ($new_lists as $n_list) {
-            $sku_lists[$sku_keys[$i]] = array_unique($n_list);
-            $i++;
-        }
-        return $sku_lists;
-    }
-
-    public function changeSku() {
-        $this->output->set_content_type('application/json');
-        $product_id = $this->input->post('product_id');
-        $group_names = $this->input->post('group_name');
-		
-        $count = count($group_names);
-        $results = $this->ecommerce_model->getProductSku($group_names);
-
-        $product_sku_id;
-
-        if ($count == 1) {
-            foreach ($results as $result) {
-                $product = $this->ecommerce_model->getProductSkuByProductSkuId($result['product_sku_id']);
-                if ($product['product_id'] == $product_id) {
-                    $product_sku_id = $product['product_sku_id'];
-                    break;
-                }
-            }
-        } else {
-            $product_sku_id = $this->getSkuOnChange($results);
-        }
-        if (!empty($product_sku_id)) {
-            $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('store/get-product-detail-wrapper/' . $product_id . '/' . $product_sku_id)]));
-            return FALSE;
-        } else {
-            $this->output->set_output(json_encode(['result' => -1, 'msg' => 'Sorry, there no more product is available for this size']));
-            return FALSE;
-        }
-    }
-
-    public function getSkuOnChange($results) {
-        $flag = 0;
-        $count = count($results);
-        $product_sku_id;
-        for ($i = 0; $i < $count; $i++) {
-            $sku_id = $results[$i]['product_sku_id'];
-            for ($j = $i + 1; $j < $count - $i; $j++) {
-                if ($sku_id == $results[$j]['product_sku_id']) {
-                    $product_sku_id = $sku_id;
-                }
-                if (!empty($product_sku_id)) {
-                    $flag = 1;
-                    break;
-                }
-            }
-            if ($flag == 1) {
-                break;
-            }
-        }
-        
-        if(!empty($product_sku_id)){
-            return $product_sku_id;
-        }else{
-            return null;
-        }
-        
-    }
+//    public function getProductSku($product_skus) {
+//        $lists = [];
+//        $i = 0;
+//        foreach ($product_skus as $product_sku) {
+//            $products = $this->ecommerce_model->getProductSkuMappingByProductSkuId($product_sku['product_sku_id']);
+//            foreach ($products as $product) {
+//                $lists[$i][$product['group_id']] = $product['group_value'];
+//                $i++;
+//            }
+//        }
+//        $skus = [];
+//        foreach ($lists as $values) {
+//            foreach ($values as $key => $value) {
+//                if (!empty($skus[$key])) {
+//                    if (array_key_exists($key, $skus)) {
+//                        $value .= ',' . $skus[$key];
+//                        $skus[$key] = $value;
+//                    }
+//                } else {
+//                    $skus[$key] = $value;
+//                }
+//            }
+//        }
+//        $sku_keys = array_keys($skus);
+//        $new_lists = [];
+//
+//        foreach ($sku_keys as $sku_key) {
+//            $new_lists[$sku_key] = explode(',', $skus[$sku_key]);
+//        }
+//        $sku_lists = [];
+//        $i = 0;
+//        foreach ($new_lists as $n_list) {
+//            $sku_lists[$sku_keys[$i]] = array_unique($n_list);
+//            $i++;
+//        }
+//        return $sku_lists;
+//    }
+//
+//    public function changeSku() {
+//        $this->output->set_content_type('application/json');
+//        $product_id = $this->input->post('product_id');
+//        $group_names = $this->input->post('group_name');
+//		
+//        $count = count($group_names);
+//        $results = $this->ecommerce_model->getProductSku($group_names);
+//
+//        $product_sku_id;
+//
+//        if ($count == 1) {
+//            foreach ($results as $result) {
+//                $product = $this->ecommerce_model->getProductSkuByProductSkuId($result['product_sku_id']);
+//                if ($product['product_id'] == $product_id) {
+//                    $product_sku_id = $product['product_sku_id'];
+//                    break;
+//                }
+//            }
+//        } else {
+//            $product_sku_id = $this->getSkuOnChange($results);
+//        }
+//        if (!empty($product_sku_id)) {
+//            $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('store/get-product-detail-wrapper/' . $product_id . '/' . $product_sku_id)]));
+//            return FALSE;
+//        } else {
+//            $this->output->set_output(json_encode(['result' => -1, 'msg' => 'Sorry, there no more product is available for this size']));
+//            return FALSE;
+//        }
+//    }
+//
+//    public function getSkuOnChange($results) {
+//        $flag = 0;
+//        $count = count($results);
+//        $product_sku_id;
+//        for ($i = 0; $i < $count; $i++) {
+//            $sku_id = $results[$i]['product_sku_id'];
+//            for ($j = $i + 1; $j < $count - $i; $j++) {
+//                if ($sku_id == $results[$j]['product_sku_id']) {
+//                    $product_sku_id = $sku_id;
+//                }
+//                if (!empty($product_sku_id)) {
+//                    $flag = 1;
+//                    break;
+//                }
+//            }
+//            if ($flag == 1) {
+//                break;
+//            }
+//        }
+//        
+//        if(!empty($product_sku_id)){
+//            return $product_sku_id;
+//        }else{
+//            return null;
+//        }
+//        
+//    }
 
     public function checkCart() {
         $flag = 0;
@@ -547,12 +538,10 @@ class Store extends CI_Controller {
         return FALSE;
     }
 
-     public function doAddStoreRateReview($product_id) {
+    public function doAddStoreRateReview($product_id) {
         $this->output->set_content_type('application/json');
         $data = $this->getDataByUniqueId();
         $user_id = $data['user_id'];
-        //$result = $this->ecommerce_model->countStoreReview($user_id, $product_id);
-        //print_r($user_id);die;
         $this->form_validation->set_rules('review', 'Review', 'required');
         if ($this->form_validation->run() === FALSE) {
             $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
@@ -567,7 +556,8 @@ class Store extends CI_Controller {
             return FALSE;
         }
     }
-	public function storeProductWishlist($product_id, $user_id) {
+    
+    public function storeProductWishlist($product_id, $user_id) {
         $this->output->set_content_type('application/json');
         $checkingResponse = $this->ecommerce_model->checkProductWishlist($product_id, $user_id);
         if ($checkingResponse) {

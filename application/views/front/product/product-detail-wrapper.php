@@ -47,20 +47,21 @@
                 </div>
                 <input type="hidden" id="cart-url" value="<?php echo base_url('store/addToCartStore'); ?>"/>
                 <input type="hidden" name="name" id="name" value="<?php echo $product['product_name']; ?>"/>
-				<input type="hidden" name="product_id" id="product_id" value="<?php echo $product['product_id']; ?>"/>
-                <input type="hidden" name="id" id="id" value="<?php echo $single_product_sku['sku']; ?>"/>
-				 <input type="hidden" id="sku-url" value="<?php echo base_url('store/changeSku'); ?>"/>
-                <p>SKU: <g><?php echo $single_product_sku['sku']; ?></g> | Category: <g><?php echo $product['shop_section_name']; ?></g></p>
+                <input type="hidden" name="product_id" id="product_id" value="<?php echo $product['product_id']; ?>"/>
+                <input type="hidden" name="id" id="id" value="<?php echo $product['product_id']; ?>"/>
+                <!--<input type="hidden" name="id" id="id" value="<?php echo $single_product_sku['sku']; ?>"/>-->
+                <!--<input type="hidden" id="sku-url" value="<?php echo base_url('store/changeSku'); ?>"/>-->
+                <!--<p>SKU: <g><?php //echo $single_product_sku['sku']; ?></g> | Category: <g><?php //echo $product['shop_section_name']; ?></g></p>-->
+                <p>SKU: <g><?php echo $product['sku']; ?></g> | Category: <g><?php echo $product['shop_section_name']; ?></g></p>
             </div>
             <div class="review_sec boxs res_review_sec resSS_review">
                 <ul class="review_box">
                     <li class="width100 mgzer0">
                         <span class="starRe"><?php if(!empty($average_rating)){ echo round($average_rating['rating'],2); } else{ echo '0.0'; } ?> <i class="fa fa-star"></i></span>
                         <a href="javascript:void(0)" class="reviewss"><?php if(!empty($ratings)){ echo count($ratings); }else{ echo 0; } ?> Reviews</a>
-                       <?php  if(isset($user_data['user_id'])){       
+                        <?php  if(isset($user_data['user_id'])){       
                                 if(!empty($wishlist['product_id'])){
-                                    //print_r($wishlist);
-                                ?> 
+                            ?> 
                                 <a href="<?php echo base_url('store/storeProductWishlist/'.$product['product_id'].'/'.$user_data['user_id']);?>" class=" product-wishlist-heart">
                                     <i class="fa fa-heart wishlist-color" ></i>
                                 </a> 
@@ -103,44 +104,13 @@
                 <?php } ?>
                     <input type="hidden" name="module" id="module" value="store"/>
                 <?php
-                $i = 0;
-                foreach ($specification as $spec) {
-                    ?>
-                    <h5>Select <?php echo $spec['group_name']; ?></h5>
-                    <div class="size_wrpr color_wrpr boxs">
-
-                        <?php
-                        if ($spec['group_name'] == 'color') {
-                            foreach ($sku_lists[$spec['group_id']] as $sku_val) {
-                                ?>
-                                <div class="fb_list">
-                                    <input type="radio" class="sku" id="fb<?php echo $i; ?>" <?php if($mapping[$spec['group_id']]==$sku_val){ echo 'checked'; } ?> name="<?php echo $spec['group_name']; ?>" value="<?php echo $sku_val; ?>">
-                                    <label for="fb<?php echo $i; ?>" style="background: <?php echo $sku_val; ?>">
-                                        <div class="faceads boxs">
-
-                                        </div>
-                                    </label>
-                                </div>
-                                <?php
-                                $i++;
-                            }
-                        } else {
-                            foreach ($sku_lists[$spec['group_id']] as $sku_val) {
-                                ?>
-                                <div class="fb_list">
-                                    <input type="radio" class="sku" id="fb<?php echo $i; ?>"  <?php if($mapping[$spec['group_id']]==$sku_val){ echo 'checked'; } ?> name="<?php echo $spec['group_name']; ?>" value="<?php echo $sku_val; ?>">
-                                    <label for="fb<?php echo $i; ?>">
-                                        <div class="faceads boxs"><h4><?php echo $sku_val; ?></h4></div>
-                                    </label>
-                                </div>
-                                <?php
-                                $i++;
-                            }
-                        }
-                        
-                        ?>
-                    </div>
-                    <?php
+                    foreach ($product_mappings as $mapping) {
+                    if(!empty($mapping['group_name'])){
+                ?>
+                    <h5>Select <?php echo $mapping['group_name']; ?> : <span><?php echo $mapping['group_value'];?></span></h5>
+                    
+                <?php
+                    }
                 }
                 ?>
             </div>

@@ -10,7 +10,7 @@
                 <div class="storeBox boxs exTab2">
                     <a href="<?php echo base_url('product/' . str_replace(' ', '-', $product['product_name'])); ?>">
                         <div class="storeBox_top boxs">
-                            <img src="<?php echo base_url('uploads/product/' . $product['image_url']); ?>" class="img-responsive" alt="store">
+                            <img src="<?php echo base_url('uploads/product-sku/' . $product['image_url']); ?>" class="img-responsive" alt="store">
                             <?php  if(isset($user_data['user_id'])){       
                                 if(!empty($product['product_wish'])){
                             ?> 

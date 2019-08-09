@@ -11,10 +11,6 @@
                     <li><a> <i class="fa fa-angle-right"></i></a></li>
                     <li><a href="<?php echo base_url('product/' . str_replace(' ', '-', $product['product_name'])); ?>" class="active"><?php echo $product['product_name']; ?></a></li>
                 </ul>
-                <!--                <div class="item_boxs">
-                                    <h2>599</h2>
-                                    <p>Items</p>
-                                </div>-->
             </div>
         </div>
         <div class="slide_sec_in boxs" id="product-detail-wrapper" data-url="<?php echo base_url('store/get-product-detail-wrapper/' . $product['product_id'] . '/' . $product_sku['product_sku_id']); ?>"></div>
@@ -139,18 +135,19 @@ if (!empty($ratings)) {
                   <div class="col-sm-12">
                 <form method="post" action="<?php echo base_url('store/doAddStoreRateReview/' . $product['product_id']); ?>" id="registerForm">
                     <h4>
-                        <img src="<?php 
-                                       if(!empty($user_data['unique_id'])) {
-										if(!empty($user_data['image_url'])){	
-											 echo base_url('uploads/profile_images/'.$user_data['image_url']);
-											}else{
-												echo base_url('assets/img/avtar.png');}
-												}
-                                        
-                                       else{echo base_url('assets/img/avtar.png');}
-                                        ?>" alt="icon">
-                        <span>Your review <g>*</g></span>
-                    </h4>
+                            <img src="<?php
+                            if (!empty($user_data['unique_id'])) {
+                                if (!empty($user_data['image_url'])) {
+                                    echo base_url('uploads/profile_images/' . $user_data['image_url']);
+                                } else {
+                                    echo base_url('assets/img/avtar.png');
+                                }
+                            } else {
+                                echo base_url('assets/img/avtar.png');
+                            }
+                            ?>" alt="icon">
+                            <span>Your review <g>*</g></span>
+                        </h4>
                    
                     <div class="messag_wrp boxs">
                         <div class="form-group">
@@ -202,7 +199,7 @@ if (!empty($ratings)) {
                                 <a href="javascript:void(0)"></a>
                                 <div class="storeBox_top boxs">
                                     <a href="<?php echo base_url('product/' . str_replace(' ', '-', $product['product_name'])); ?>">
-                                        <img src="<?php echo base_url('uploads/product/' . $product['image_url']); ?>" class="img-responsive" alt="store">
+                                        <img src="<?php echo base_url('uploads/product-sku/' . $product['image_url']); ?>" class="img-responsive" alt="store">
                                     </a>
 									<!--<a href="javascript:void(0)" class="heart_icon">
                                         <i class="fa fa-heart"></i>
@@ -250,9 +247,7 @@ if (!empty($ratings)) {
                     }
                 }
                 ?>
-
             </div>
-
         </div>
     </div>
 </section>

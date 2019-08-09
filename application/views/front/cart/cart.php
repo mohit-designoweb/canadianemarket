@@ -56,7 +56,7 @@
                                             <div class="cartlist boxs">
                                                 <div class="cart_items boxs">
                                                     <div class="item_img">
-                                                        <img src="<?php echo base_url('uploads/product/' . $value['product']['image_url']); ?>" alt="itemimg" class="img-responsive">
+                                                        <img src="<?php echo base_url('uploads/product-sku/' . $value['product']['image_url']); ?>" alt="itemimg" class="img-responsive">
                                                     </div>
                                                     <div class="item_details">
                                                         <div class="id_lft boxs">

@@ -26,11 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['stripe_key'] = 'pk_test_vJ4le6Wr7z1Xz57l4QzJLBxz00ttl0Q6bf';
 $config['stripe_secret'] = 'sk_test_m6ralmqBsA6ced5QaIyizpv400mdYo3UVO';
-<<<<<<< HEAD
-$config['base_url'] = 'http://localhost/canadianemarket/';
-=======
 $config['base_url'] = 'http://localhost/canadianemarket';
->>>>>>> 1013f6c3801bbcff8fb1f818613efa42e1c9c6e6
 
 
 /*

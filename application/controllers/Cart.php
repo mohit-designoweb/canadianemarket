@@ -182,20 +182,17 @@ class Cart extends CI_Controller {
         return FALSE;
     }
 	
-	public function getUserAddress()
-	{
-		$list = [];
-		$i = 0;
-		$list = [''=>'----SELECT ADDRESS----'];
-		$user_data = $this->getDataByUniqueId();
-		$addresses = $this->ecommerce_model->getUserAddress($user_data['user_id']);
-		foreach($addresses as $address)
-		{
-			$list[$address['address_id']] = $address['address'];
-		}
-		return $list;
-	}
-
+    public function getUserAddress() {
+        $list = [];
+        $i = 0;
+        $list = ['' => '----SELECT ADDRESS----'];
+        $user_data = $this->getDataByUniqueId();
+        $addresses = $this->ecommerce_model->getUserAddress($user_data['user_id']);
+        foreach ($addresses as $address) {
+            $list[$address['address_id']] = $address['address'];
+        }
+        return $list;
+    }
 
     public function delivery() {
         if (empty($this->session->userdata('store_cart'))) {
@@ -206,9 +203,9 @@ class Cart extends CI_Controller {
         }
         $data['title'] = 'delivery';
         $data['store_cart'] = $this->session->userdata('store_cart');
-		$data['countries'] = $this->getFilterCountry();
+        $data['countries'] = $this->getFilterCountry();
         $data['user_data'] = $user_data = $this->getDataByUniqueId();
-		$data['user_address'] = $this->getUserAddress();
+        $data['user_address'] = $this->getUserAddress();
         $data['shipping_address'] = $this->ecommerce_model->get_address_by_userid($user_data['user_id']);
         $this->load->view('front/commons/header', $data);
         $this->load->view('front/cart/shipping-detail');
@@ -413,7 +410,7 @@ class Cart extends CI_Controller {
         $this->session->unset_userdata('check');
         $this->cart->destroy();
         $data['title'] = 'Success Order';
-		$data['countries'] = $this->ecommerce_model->getCountry();
+	$data['countries'] = $this->ecommerce_model->getCountry();
         $data['cities'] = $this->getCities();
         $data['user_data'] = $this->getDataByUniqueId();
         $this->load->view('front/commons/header', $data);

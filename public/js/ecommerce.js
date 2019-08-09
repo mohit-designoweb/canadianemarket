@@ -87,10 +87,11 @@ var Event = function () {
                 }
             });
         });
-
+        
         $(document).on('submit', '#loginForm', function (evt) {
             evt.preventDefault();
             var url = $(this).attr("action");
+            
             var postdata = $(this).serialize();
             $.post(url, postdata, function (out) {
                 $(".form-group > .error").remove();
@@ -937,7 +938,6 @@ var Event = function () {
                 setTimeout(function () {
                     location.reload();
                 }, 2000);
-                //  location.reload();
             });
 
         });
