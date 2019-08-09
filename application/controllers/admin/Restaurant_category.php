@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * Description of Restaurant
+ *
+ * @author Mohit Kant Gupta
+ */
+class Restaurant_category extends CI_Controller {
+
+    public function __construct() {
+        parent::__construct();
+        $this->load->model(['admin_model', 'restaurant_model']);
+        if (empty($this->session->userdata('email_admin'))) {
+            redirect(base_url('admin'));
+        }
+    }
+
+    public function getUserData() {
+        $email = $this->session->userdata('email_admin');
+        return $this->admin_model->getUserdata($this->session->userdata('is_admin'), $email);
+    }
+
+    
+    public function restaurant_category($id = NULL) {
+        if (!empty($id)) {
+            $data['cat'] = $this->restaurant_model->getRestaurantCategoryById($id);
+        }
+        $data['table'] = '1';
+        $data['title'] = 'Restaurant Category';
+        $data['user'] = $this->getUserData();
+        $this->load->view('admin/commons/header', $data);
+        $this->load->view('admin/commons/admin-sidebar', $data);
+        $this->load->view('admin/restaurant-category/category');
+        $this->load->view('admin/commons/footer');
+    }
+    
+    public function get_restaurant_category_wrapper(){
+        $this->output->set_content_type('application/json');
+        $data['catgories'] = $this->restaurant_model->getAllRestaurantCategory();
+        $content_wrapper = $this->load->view('admin/restaurant-category/category-wrapper', $data, true);
+        $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
+        return FALSE;
+    }
+    
+    public function doAddRestaurantCategory(){
+        $this->output->set_content_type('application/json');
+        $this->form_validation->set_rules('category_name', 'Category Name', 'required');
+        if ($this->form_validation->run() === FALSE) {
+            $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
+            return FALSE;
+        }
+        $result = $this->restaurant_model->doAddCategory();
+        if ($result) {
+            $this->output->set_output(json_encode(['result' => 1, 'msg' => 'Category Added Sucessfully', 'url' => base_url('admin/restaurant-category')]));
+            return FALSE;
+        } else {
+            $this->output->set_output(json_encode(['result' => -1, 'msg' => 'Category Not Added']));
+            return FALSE;
+        }
+    }
+    
+    public function doEditRestaurantCategory($id) {
+        $this->output->set_content_type('application/json');
+        $this->form_validation->set_rules('category_name', 'Category Name', 'required');
+        if ($this->form_validation->run() === FALSE) {
+            $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
+            return FALSE;
+        }
+        $result = $this->restaurant_model->doEditRestaurantCategory($id);
+        if ($result) {
+            $this->output->set_output(json_encode(['result' => 1,'msg'=>'Details updated sucessfully', 'url' => base_url('admin/restaurant-category')]));
+            return FALSE;
+        } else {
+            $this->output->set_output(json_encode(['result' => -1, 'msg' => 'No Changes Were Made.', 'url' => base_url('category/restaurant-category')]));
+            return FALSE;
+        }
+    }
+    
+    public function changeRestaurantCategoryStatus($category_id,$status) {
+        $this->output->set_content_type('application/json'); 
+        $this->restaurant_model->changeCategoryStatus($category_id,$status);
+        $this->output->set_output(json_encode(['result' => 1]));
+        return FALSE;
+    }
+
+}

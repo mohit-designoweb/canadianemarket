@@ -1,0 +1,2 @@
+   <?php echo form_dropdown(['name' => 'job_type_id', 'id' => 'job_type_id', 'class' => 'form-control'], $list, isset($jobDetail['job_type_id']) ? $jobDetail['job_type_id'] : ''); ?>   
+                                   

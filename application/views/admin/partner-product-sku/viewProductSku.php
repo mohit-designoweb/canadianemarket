@@ -1,0 +1,19 @@
+<section class="admin-content">
+    <div class="bg-dark">
+        <div class="container  m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+                    <h4><a href="<?php echo base_url('partner/partner-shop-section') ?>">Shop Section</a> / <a href="<?php echo base_url('partner/partnerProduct/' . $store_id . '/' . $shop_section_id); ?>">Product</a> / Product Sku</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container pull-up">
+        <div class="row">
+            <div class="col-12" id="content-wrapper" data-url="<?php echo base_url('partner/get-product-sku-wrapper/' . $store_id . '/' . $shop_section_id . '/' . $product_id); ?>"></div>
+        </div>
+    </div>
+</section>
+
+</main>

@@ -1,0 +1,2 @@
+user_name ,email,password,source,unique_id,last_name,phone,address1,address2,dob,gender,is_active
+rajesh,ryrkgit1996@gmail.com,1234,self,123ert,Yadav,9821280367,Delhi,noida,18-05-1903,Male,Active
