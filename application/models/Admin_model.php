@@ -785,5 +785,29 @@ class Admin_model extends CI_Model {
         $query = $this->db->get();
         return $query->result_array();
     }
+    public function getStoreDeliveredOrderData() {
+        $this->db->select('o.order_id,o.order_unique_id,o.total_amount,o.status,o.order_date,o.order_time,od.product_id,od.product_sku,
+		od.price,od.qty,u.user_id,u.user_name,u.email');
+        $this->db->from('store_order o');
+        $this->db->join('store_order_detail od', 'o.order_unique_id=od.order_unique_id');
+        $this->db->join('user u', 'o.user_id=u.user_id');
+        $this->db->where('o.status', 'Delivered');
+        $this->db->group_by('o.order_unique_id');
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die;
+        return $query->result_array();
+    }
+    public function getStoreCanceledOrderData() {
+        $this->db->select('o.order_id,o.order_unique_id,o.total_amount,o.status,o.order_date,o.order_time,od.product_id,od.product_sku,
+		od.price,od.qty,u.user_id,u.user_name,u.email');
+        $this->db->from('store_order o');
+        $this->db->join('store_order_detail od', 'o.order_unique_id=od.order_unique_id');
+        $this->db->join('user u', 'o.user_id=u.user_id');
+        $this->db->where('o.status', 'Cancel');
+        $this->db->group_by('o.order_unique_id');
+        $query = $this->db->get();
+        //echo $this->db->last_query(); die;
+        return $query->result_array();
+    }
 	
 }

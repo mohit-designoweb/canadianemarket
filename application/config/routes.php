@@ -548,6 +548,16 @@ $route['admin/store-orders'] = 'admin/admin/store-orders';
 $route['admin/get-admin-store-order-wrapper'] = 'admin/admin/get-admin-store-order-wrapper';
 $route['admin/viewStoreOrderDetail/(:any)'] = 'admin/admin/viewStoreOrderDetail/$1';
 
+//Admin Store Delivered Order Management
+$route['admin/store-orders'] = 'admin/admin/store-orders';
+$route['admin/get-admin-store-delivered-order-wrapper'] = 'admin/admin/get-admin-store-delivered-order-wrapper';
+$route['admin/viewStoreOrderDetail/(:any)'] = 'admin/admin/viewStoreOrderDetail/$1';
+
+//Admin Store Cancel Order Management
+$route['admin/store-orders'] = 'admin/admin/store-orders';
+$route['admin/get-admin-store-canceled-order-wrapper'] = 'admin/admin/get-admin-store-canceled-order-wrapper';
+$route['admin/viewStoreOrderDetail/(:any)'] = 'admin/admin/viewStoreOrderDetail/$1';
+
 //Admin restaurant delivered Order Management
 $route['admin/restaurant-delivered-orders'] = 'admin/admin/restaurant-delivered-orders';
 $route['admin/get-admin-restaurant-delivered-order-wrapper'] = 'admin/admin/get-admin-restaurant-delivered-order-wrapper';

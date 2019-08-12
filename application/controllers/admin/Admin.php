@@ -422,12 +422,26 @@ class Admin extends CI_Controller {
         $this->output->set_content_type('application/json');
         $partner = $this->getUserData();
         $data['orders'] = $this->admin_model->getRestaurantDeliveredOrderData();
-//        echo "<pre>";
-//        print_r($data['orders']);
-//        echo "<pre>"; die;
         $content_wrapper = $this->load->view('admin/admin-restaurant-order-management/delivered-order/cancel-order-wrapper', $data, true);
         $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
         return FALSE;
     }
+     public function get_admin_store_delivered_order_wrapper() {
+        $this->output->set_content_type('application/json');
+        $partner = $this->getUserData();
+        $data['orders'] = $this->admin_model->getStoreDeliveredOrderData();
+        $content_wrapper = $this->load->view('admin/admin-store-order-management/includes/delivered-order-wrapper', $data, true);
+        $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
+        return FALSE;
+    }
+     public function get_admin_store_canceled_order_wrapper() {
+        $this->output->set_content_type('application/json');
+        $partner = $this->getUserData();
+        $data['orders'] = $this->admin_model->getStoreCanceledOrderData();
+        $content_wrapper = $this->load->view('admin/admin-store-order-management/includes/cancel-order-wrapper', $data, true);
+        $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
+        return FALSE;
+    }
+
 
 }
