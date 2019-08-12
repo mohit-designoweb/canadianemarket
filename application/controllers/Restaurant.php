@@ -266,6 +266,7 @@ class Restaurant extends CI_Controller {
         $this->output->set_content_type('application/json');
         $data['user_data'] = $user_data = $this->getDataByUniqueId();
         $data['restaurant_id'] = $restaurant_id;
+        $data['menu_wishlist_item'] = $this->ecommerce_model->getMenuWishlistItem($data['user_data']['user_id']);
         $data['menus'] = $this->ecommerce_model->getMenuByMenuCategoryId($menu_category_id);
         $content_wrapper = $this->load->view('front/restaurant/menu-wrapper', $data, true);
         $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
@@ -714,11 +715,11 @@ class Restaurant extends CI_Controller {
         $this->output->set_content_type('application/json');
         $checkingResponse = $this->ecommerce_model->checkRestaurantMenuWishlist($menu_id, $user_id);
         if ($checkingResponse) {
-            $this->output->set_output(json_encode(['result' => 1]));
+            $this->output->set_output(json_encode(['result' => 1,'msg'=>'Menu Item Removed From Wishlist']));
             return FALSE;
         } else {
             $response = $this->ecommerce_model->addRestaurantmenuWishlist($menu_id, $user_id);
-            $this->output->set_output(json_encode(['result' => 1]));
+            $this->output->set_output(json_encode(['result' => 1, 'msg'=>'Menu Item Added In Wishlist']));
             return FALSE;
         }
     }

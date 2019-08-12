@@ -51,6 +51,7 @@ var Event = function () {
         this.getActiveStoreCount();
         this.updateForgotPassword();
         this.removeFromWishlist();
+        this.addMenuWishlist();
     };
 
     this.addCategory = function () {
@@ -1254,6 +1255,15 @@ var Event = function () {
                 {
                     location.reload();
                 }
+            });
+        });
+    };
+    this.addMenuWishlist = function(){
+        $(document).on('click','.menu-wishlist',function(evt){
+            evt.preventDefault();
+            var url = $(this).attr('href');
+            $.post(url,'',function(out){
+                alert(out.msg);
             });
         });
     };

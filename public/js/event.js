@@ -43,6 +43,7 @@ var Event = function () {
         this.storeWrapperImageCommonForm();
         this.restaurantWrapperCommonForm();
         this.restaurantWrapperImageCommonForm();
+        
     };
 
     this.loader = function () {
@@ -1105,6 +1106,7 @@ var Event = function () {
             });
         });
     };
+    
 
     this.__construct();
 };
