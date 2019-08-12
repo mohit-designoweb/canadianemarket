@@ -1,9 +1,10 @@
+
 <div class="card">
     <div class="card-header">
         <div class="row">
             <div class="col-3">
                 <h5 class="m-b-0" style="padding-top: 5px">
-                    Current Order
+                    Cancel Order
                 </h5>
             </div>
             <!--            <div class="col-2 offset-7">
@@ -28,8 +29,8 @@
                 <tbody>
 
                     <?php
-                   
                     if (!empty($orders)) {
+                     
                         $i = 1;
                         foreach ($orders as $order) {
                             ?>
@@ -41,7 +42,7 @@
                                 <td><?php echo $order['order_time']; ?></td>
                                 <td><?php echo $order['order_status']; ?></td>
                                 <td>
-                                    <a href="<?php echo base_url('admin/viewOrderDetail/' . $order['order_id']."/".$order['restaurant_id']); ?>" data-toggle="tooltip" data-placement="top" title="View Order Detail" class="btn btn-primary btn-sm">View Detail <i class="fe fe-eye"></i></a>
+                                    <a href="<?php echo base_url('admin/viewOrderDetail/' . $order['order_id']."/".$order['restaurant_id']); ?>" data-toggle="tooltip" data-placement="top" title="View Order Detail"><i class="fe fe-eye"></i></a>
 
                                 </td>
                             </tr>

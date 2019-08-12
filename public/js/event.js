@@ -43,7 +43,7 @@ var Event = function () {
         this.storeWrapperImageCommonForm();
         this.restaurantWrapperCommonForm();
         this.restaurantWrapperImageCommonForm();
-        
+        this.storeOrderWrapper();
     };
 
     this.loader = function () {
@@ -1106,7 +1106,33 @@ var Event = function () {
             });
         });
     };
-    
+    this.storeOrderWrapper = function(){
+        $(document).ready(function(){
+            if($('.restaurantorder').hasClass('active')){
+               var url = $('.restaurantorder').attr('href');
+            }
+            $.post(url,'',function(out){
+                if(out.result === 1){
+                    $('#content-wrapper').html(out.content_wrapper);
+                }
+            });
+        });
+        $(document).on('click', '.restaurantorder', function (evt) {
+            evt.preventDefault();
+            $('.restaurantorder').removeClass('active');
+            var url = $(this).attr('href');
+            $(this).addClass('active');
+            $.post(url, '', function (out) {
+                if (out.result === 1) {
+                    $('#content-wrapper').html(out.content_wrapper);
+                    $('#example').DataTable({
+                        responsive: true,
+                        destroy: true
+                    });
+                }
+            });
+        });
+    };
 
     this.__construct();
 };

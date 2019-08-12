@@ -365,5 +365,69 @@ class Admin extends CI_Controller {
         $this->load->view('admin/admin-store-order-management/add-order');
         $this->load->view('admin/commons/footer');
     }
+    //////restaurant delivered order function
+	public function restaurant_delivered_orders()
+    {
+       
+        $data['title'] = 'Admin Restaurant Delivered Orders';
+        $data['table'] = '1';
+        $data['user'] = $this->getUserData();
+        $data['is_admin'] = $this->session->userdata('is_admin');
+        //$this->load->view('admin/commons/header', $data);
+        //$this->load->view('admin/commons/admin-sidebar', $data);
+        $this->load->view('admin/admin-restaurant-order-management/delivered-order/view-order');
+       // $this->load->view('admin/commons/footer');
+    }
+    
+     public function get_admin_restaurant_delivered_order_wrapper() {
+      
+        $this->output->set_content_type('application/json');
+        $partner = $this->getUserData();
+        $data['orders'] = $this->admin_model->getRestaurantDeliveredOrderData();
+//        echo "<pre>";
+//        print_r($data['orders']);
+//        echo "<pre>"; die;
+        $content_wrapper = $this->load->view('admin/admin-restaurant-order-management/delivered-order/order-wrapper', $data, true);
+        $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
+        return FALSE;
+    }
+     public function viewDeliveredOrderDetail($id,$restaurant_id=NULL) {
+        if(!empty($restaurant_id))
+        {
+        $restaurant_detail = $this->admin_model->getRestaurantDetailById($restaurant_id);
+        $this->session->set_userdata('restaurant_id',$restaurant_detail['restaurant_id']);
+        $this->session->set_userdata('restaurant_latitude',$restaurant_detail['latitude']);
+        $this->session->set_userdata('restaurant_longitude',$restaurant_detail['longitude']);
+        }
+        $data['order_detail1'] = $this->admin_model->getOrderDetailById($id);
+        $data['user_info'] = $this->admin_model->getUserDetailById($data['order_detail1']['user_id']);
+        $data['menu'] = $this->admin_model->getMenuDetailById($data['order_detail1']['menu_id']);
+       // $data['courier'] = $this->admin_model->getCourierDetailById($data['order_detail1']['courier_id']);
+        $data['order_detail'] = $this->admin_model->getOrderDetailByUniqueId($data['order_detail1']['unique_order_id']);
+        //if($data['order_detail1']['courier_id']!="")
+        //{
+          //  $data['courierDetail'] = $this->admin_model->getCourierDetailById($data['order_detail1']['courier_id']);
+        //}
+        //$data['couriers'] = $this->getAllActiveCourier();
+        $data['detail'] = $this->session->userdata('order_Detail');
+        $data['user'] = $this->getUserData();
+        $data['title'] = 'Admin Restaurant Delivered Orders';
+        $this->load->view('admin/commons/header', $data);
+        $this->load->view('admin/commons/admin-sidebar', $data);
+        $this->load->view('admin/admin-restaurant-delivered-order/add-order');
+        $this->load->view('admin/commons/footer');
+    }
+     public function get_admin_restaurant_cancel_order_wrapper() {
+      
+        $this->output->set_content_type('application/json');
+        $partner = $this->getUserData();
+        $data['orders'] = $this->admin_model->getRestaurantDeliveredOrderData();
+//        echo "<pre>";
+//        print_r($data['orders']);
+//        echo "<pre>"; die;
+        $content_wrapper = $this->load->view('admin/admin-restaurant-order-management/delivered-order/cancel-order-wrapper', $data, true);
+        $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
+        return FALSE;
+    }
 
 }

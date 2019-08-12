@@ -765,6 +765,25 @@ class Admin_model extends CI_Model {
 		return $query->row_array();
 	}
 	/////////store order function end
-	
+	/////////Restaurant Delivered rder Function
+        
+        public function getRestaurantDeliveredOrderData() {
+        $this->db->select('o.order_id,o.total_amount,o.order_status,o.order_date,o.order_time,r.restaurant_name,r.latitude,r.longitude,r.restaurant_id,u.user_name');
+        $this->db->from('restaurant_orders o');
+        $this->db->join('restaurant r', 'r.restaurant_id=o.restaurant_id');
+        $this->db->join('user u', 'o.user_id=u.user_id');
+        $this->db->where('o.order_status', 'Delivered');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    public function getRestaurantCancelOrderData() {
+        $this->db->select('o.order_id,o.total_amount,o.order_status,o.order_date,o.order_time,r.restaurant_name,r.latitude,r.longitude,r.restaurant_id,u.user_name');
+        $this->db->from('restaurant_orders o');
+        $this->db->join('restaurant r', 'r.restaurant_id=o.restaurant_id');
+        $this->db->join('user u', 'o.user_id=u.user_id');
+        $this->db->where('o.order_status', 'Cancel');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 	
 }

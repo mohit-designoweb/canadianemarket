@@ -548,6 +548,13 @@ $route['admin/store-orders'] = 'admin/admin/store-orders';
 $route['admin/get-admin-store-order-wrapper'] = 'admin/admin/get-admin-store-order-wrapper';
 $route['admin/viewStoreOrderDetail/(:any)'] = 'admin/admin/viewStoreOrderDetail/$1';
 
+//Admin restaurant delivered Order Management
+$route['admin/restaurant-delivered-orders'] = 'admin/admin/restaurant-delivered-orders';
+$route['admin/get-admin-restaurant-delivered-order-wrapper'] = 'admin/admin/get-admin-restaurant-delivered-order-wrapper';
+$route['admin/viewDeliveredOrderDetail/(:any)/(:any)'] = 'admin/admin/viewDeliveredOrderDetail/$1/$2';
+
+//Admin restaurant cancel Order Management
+$route['admin/get-admin-restaurant-cancel-order-wrapper'] = 'admin/admin/get-admin-restaurant-cancel-order-wrapper';
 
 //Front End Routing
 

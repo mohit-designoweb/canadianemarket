@@ -88,6 +88,48 @@
             </a>
         </li>
 		-->
+                
+        <li class="menu-item <?php if($title=='Admin Restaurant Orders'|$title=='Add Registered User'){ echo 'active opened'; } ?>">
+            <a href="#" class="open-dropdown menu-link">
+                <span class="menu-label">
+                    <span class="menu-name">New Orders
+                    </span>
+                    <span class="arrowcaret">
+                        <i class="fa fa-angle-down" aria-hidden="true"></i>
+                        <i class="fa fa-angle-up" aria-hidden="true"></i>
+                    </span>
+                </span>
+                <span class="menu-icon">
+                    <i class="icon-placeholder fe fe-activity"></i>
+                </span>
+            </a>
+            <!--submenu-->
+            <ul class="sub-menu" <?php if($title=='Admin Restaurant Orders'|$title=='Admin Store Orders'){ echo 'style="display: block;"'; } ?>>
+
+                <li class="menu-item <?php if($title=='Admin Restaurant Orders'){ echo 'active'; } ?>">
+                    <a href="<?php echo base_url('admin/restaurant-orders') ?>" class="menu-link">
+                        <span class="menu-label">
+                            <span class="menu-name">Restaurant Orders</span>
+                        </span>
+                        <span class="menu-icon">
+                            <i class="icon-placeholder mdi mdi-step-forward"></i>
+                        </span>
+                    </a>
+                </li>    
+
+                <li class="menu-item <?php if($title=='Admin Store Orders'){ echo 'active'; } ?>">
+                    <a href="<?php echo base_url('admin/store-orders'); ?>" class="menu-link">
+                        <span class="menu-label">
+                            <span class="menu-name">Store Orders</span>
+                        </span>
+                        <span class="menu-icon">
+                            <i class="icon-placeholder mdi mdi-step-forward"></i>
+                        </span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>        
         <!-- User module opens -->
         <li class="menu-item <?php if($title=='Registered User'|$title=='Add Registered User'){ echo 'active opened'; } ?>">
             <a href="#" class="open-dropdown menu-link">
