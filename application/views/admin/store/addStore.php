@@ -149,9 +149,9 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="estimated_delivery_time">Order Fulfilment time</label>
+                                        <label for="estimated_delivery_time">Order Fulfillment time (In minutes)</label>
                                         <?php
-                                            echo form_dropdown(['name' => 'estimated_delivery_time', 'id' => 'estimated_delivery_time', 'class' => 'form-control'], $fulfilment, isset($store['estimated_delivery_time']) ? $store['estimated_delivery_time'] : '');
+                                            echo form_input(['name' => 'estimated_delivery_time', 'id' => 'estimated_delivery_time', 'class' => 'form-control'], isset($store['estimated_delivery_time']) ? $store['estimated_delivery_time'] : '');
                                         ?> 
                                        
                                     </div>

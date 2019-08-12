@@ -1553,7 +1553,9 @@ class Ecommerce_model extends CI_Model {
     }
     
     public function get_productid_by_skuid($sku){
-        $query = $this->db->get_where('product_sku', ['sku'=>$sku]);
+        $query = $this->db->get_where('product', ['sku'=>$sku]);
+        echo $this->db->last_query();
+        die;
         return $query->row_array();
     }
 }

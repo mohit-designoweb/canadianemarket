@@ -1,5 +1,6 @@
 var Event = function () {
     this.__construct = function () {
+        this.form();
         this.orderWrapper();
         this.removeFromCart();
         this.increaseQuantity();
@@ -10,6 +11,159 @@ var Event = function () {
         this.storeCheckOut();
         this.doAddShippingAddress();
         this.cashOnDelivery();
+    };
+    
+    this.form = function () {
+        $(document).on('submit', '#registerForm, #myAccountForm,#gift-card-form,#rate_review, #review', function (evt) {
+            evt.preventDefault();
+            var url = $(this).attr("action");
+            var postdata = $(this).serialize();
+            $.post(url, postdata, function (out) {
+                $(".form-group > .error").remove();
+                if (out.result === 0) {
+                    for (var i in out.errors) {
+                        $("#" + i).parents(".form-group").append('<span class="error">' + out.errors[i] + '</span>');
+                        $("#" + i).focus();
+                    }
+                }
+                if (out.result === -1) {
+                    var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    if (out.id == "") {
+                        $("#error_msg").removeClass('alert-warning alert-success').addClass('alert alert-danger alert-dismissable').show();
+                        $("#error_msg").html(message + out.msg);
+                        $("#error_msg").fadeOut(2000);
+                    } else {
+                        $("#error_msg2").removeClass('alert-warning alert-success').addClass('alert alert-danger alert-dismissable').show();
+                        $("#error_msg2").html(message + out.msg);
+                        $("#error_msg2").fadeOut(2000);
+                    }
+
+                    if (out.url) {
+                        window.location.href = out.url;
+                    }
+                }
+                if (out.result === 1) {
+                    window.location.href = out.url;
+                }
+            });
+        });
+        
+        $(document).on('submit', '#loginForm', function (evt) {
+            evt.preventDefault();
+            var url = $(this).attr("action");
+            
+            var postdata = $(this).serialize();
+            $.post(url, postdata, function (out) {
+                $(".form-group > .error").remove();
+                if (out.result === 0) {
+                    for (var i in out.errors) {
+                        $("#" + i).parents(".form-group").append('<span class="error">' + out.errors[i] + '</span>');
+                        $("#" + i).focus();
+                    }
+                }
+                if (out.result === -1) {
+                    var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    $("#error_msg1").removeClass('alert-warning alert-success').addClass('alert alert-danger alert-dismissable').show();
+                    $("#error_msg1").html(message + out.msg);
+                    $("#error_msg1").fadeOut(2000);
+                    if (out.url) {
+                        window.location.href = out.url;
+                    }
+                }
+                if (out.result === 1) {
+                    window.location.href = out.url;
+                }
+            });
+        });
+
+        $(document).on('submit', '#forgotPasswordForm', function (evt) {
+            evt.preventDefault();
+            var url = $(this).attr("action");
+            var postdata = $(this).serialize();
+            $.post(url, postdata, function (out) {
+                $(".form-group > .error").remove();
+                if (out.result === 0) {
+                    for (var i in out.errors) {
+                        $("#" + i).parents(".form-group").append('<span class="error">' + out.errors[i] + '</span>');
+                        $("#" + i).focus();
+                    }
+                }
+                if (out.result === -1) {
+                    $("#regiter_email").parents(".form-group").append('<span class="error">' + out.errors + '</span>');
+                    $("#regiter_email").focus();
+                }
+                if (out.result === 1) {
+                    alert(out.msg);
+                    var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    $("#error_msg").removeClass('alert-success alert-success').addClass('alert alert-danger alert-dismissable').show();
+                    $("#error_msg").html(message + out.msg);
+                    $("#error_msg").fadeOut(9000);
+                    //window.location.href = out.url;
+                }
+            });
+        });
+
+
+        $(document).on('submit', '#otpForm', function (evt) {
+            evt.preventDefault();
+            var url = $(this).attr("action");
+            var postdata = $(this).serialize();
+            $.post(url, postdata, function (out) {
+                if (out.result === 0) {
+                    for (var i in out.errors) {
+                        $("#" + i).parents(".form-group").append('<span class="error text-danger">' + out.errors[i] + '</span>');
+                        $("#" + i).focus();
+                    }
+                }
+                if (out.result === -1) {
+                    $("#otp").parents(".form-group").append('<span class="error text-danger">' + out.msg + '</span>');
+                    $("#otp").focus();
+                }
+                if (out.result === 1) {
+                    //alert(out.url);
+                    var error_msg=$('#otpForm').children('.formbox').children('#error_msg');
+                    var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    error_msg.removeClass('alert-warning alert-success').addClass('alert alert-success alert-dismissable').show();
+                    error_msg.html(message + out.msg);
+                    error_msg.fadeOut(2000);
+                    setTimeout(function () {
+                        window.location.href = out.url;
+                    }, 2000);
+
+                }
+            });
+        });
+
+        $(document).on('submit', '#courierOtpForm', function (evt) {
+            evt.preventDefault();
+            var url = $(this).attr("action");
+            var postdata = $(this).serialize();
+            $.post(url, postdata, function (out) {
+                $(".form-group > .error").remove();
+                if (out.result === 0) {
+                    for (var i in out.errors) {
+                        // alert(out.errors[i]);
+                        $("#" + i).parents(".form-group").append('<span class="error text-danger">' + out.errors[i] + '</span>');
+                        $("#" + i).focus();
+                    }
+                }
+                if (out.result === -1) {
+                    $("#courireOtp").parents(".form-group").append('<span class="error text-danger">' + out.msg + '</span>');
+                    $("#courireOtp").focus();
+                }
+                if (out.result === 1) {
+                    //alert(out.url);
+                    var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    $("#courier_error_msg").removeClass('alert-warning alert-success').addClass('alert alert-success alert-dismissable').show();
+                    $("#courier_error_msg").html(message + out.msg);
+                    $("#courier_error_msg").fadeOut(2000);
+                    setTimeout(function () {
+                        window.location.href = out.url;
+                    }, 2000);
+
+                }
+            });
+        });
     };
 
     this.orderWrapper = function () {

@@ -372,8 +372,7 @@ class Store extends CI_Controller {
         $data['ratings'] = $this->ecommerce_model->getAllRating($product['product_id']);
         $data['review_details'] = $this->ecommerce_model->getStoreReviewByProductId($product['product_id']);
 
-        $data['countries'] = $this->ecommerce_model->getCountry();
-        $data['cities'] = $this->getCities();
+        $data['countries'] = $this->getFilterCountry();
         $this->load->view('front/commons/header', $data);
         $this->load->view('front/product/product');
         $this->load->view('front/commons/footer');

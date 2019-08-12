@@ -20,16 +20,16 @@ class Cart extends CI_Controller {
             return $data;
         }
     }
-    
-    public function getFilterCountry(){
-        $countries=$this->ecommerce_model->getCountry();
-        $list=[''=>'Select Country'];
-        foreach($countries as $country){
-            $list[$country['country_id']]=$country['country_name'];
+
+    public function getFilterCountry() {
+        $countries = $this->ecommerce_model->getCountry();
+        $list = ['' => 'Select Country'];
+        foreach ($countries as $country) {
+            $list[$country['country_id']] = $country['country_name'];
         }
         return $list;
     }
-	
+
     public function getCities() {
         if (!empty($this->input->cookie('country_id', true))) {
             $country_id = $this->input->cookie('country_id', true);
@@ -43,8 +43,7 @@ class Cart extends CI_Controller {
     public function index() {
         $data['user_data'] = $this->getDataByUniqueId();
         $data['title'] = 'Cart';
-		$data['countries'] = $this->getFilterCountry();
-        $data['cities'] = $this->getCities();
+        $data['countries'] = $this->getFilterCountry();
         $data['cart_data'] = $this->cartDetails();
         $data['specifications'] = $this->ecommerce_model->getAllSpecification();
         $this->load->view('front/commons/header', $data);
@@ -181,7 +180,7 @@ class Cart extends CI_Controller {
         $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('delivery')]));
         return FALSE;
     }
-	
+
     public function getUserAddress() {
         $list = [];
         $i = 0;
@@ -220,8 +219,8 @@ class Cart extends CI_Controller {
         $this->form_validation->set_rules('cmpny', 'Company name', 'trim');
         $this->form_validation->set_rules('country', 'Country Name', 'trim|required');
         $this->form_validation->set_rules('town', 'City Name', 'trim|required');
-       // $this->form_validation->set_rules('address', 'Address', 'trim|required');
-	   $this->form_validation->set_rules('address_id','Address','required');
+        // $this->form_validation->set_rules('address', 'Address', 'trim|required');
+        $this->form_validation->set_rules('address_id', 'Address', 'required');
         $this->form_validation->set_rules('province', 'Province', 'trim|required');
         $this->form_validation->set_rules('pcode', 'Pin Code', 'trim|required');
         $this->form_validation->set_rules('phone', 'Phone', 'trim|required');
@@ -246,7 +245,7 @@ class Cart extends CI_Controller {
         if (empty($this->session->userdata('unique_id'))) {
             redirect(base_url('cart'));
         }
-		$data['countries'] = $this->getFilterCountry();
+        $data['countries'] = $this->getFilterCountry();
         $data['title'] = 'Payment';
         $data['user_data'] = $user_data = $this->getDataByUniqueId();
         $data['userpayment_data'] = $this->ecommerce_model->get_payment_card_data_user_id($user_data['user_id']);
@@ -296,7 +295,7 @@ class Cart extends CI_Controller {
         \Stripe\Stripe::setApiKey($this->config->item('stripe_secret'));
 
         $charge = \Stripe\Charge::create([
-                    "amount" => str_replace(',','',strtok($store_cart['final_total'], '.')),
+                    "amount" => str_replace(',', '', strtok($store_cart['final_total'], '.')),
                     "currency" => "usd",
                     "source" => $payment_data['stripetoken'],
                     "description" => "Test payment for Gift Card"
@@ -333,28 +332,27 @@ class Cart extends CI_Controller {
             'order_time' => date('H:i:s'),
             'tip' => $store_cart['tip'],
         );
-        
+
         $store_order_id = $this->ecommerce_model->store_order_place($order_data);
         $orderdata = $this->ecommerce_model->get_store_orderdata_by_id($store_order_id);
         $unique_order_id = $orderdata['order_unique_id'];
         /*  for insert data in database close */
-        if(!empty($unique_order_id)){
+        if (!empty($unique_order_id)) {
             $this->session->set_flashdata('success', 'Payment made successfully.');
-            redirect(base_url('cart/storeorder-detail/'.$unique_order_id));
+            redirect(base_url('cart/storeorder-detail/' . $unique_order_id));
         }
     }
-    
-    
-    public function cash_on_delivery(){
+
+    public function cash_on_delivery() {
         $this->output->set_content_type('application/json');
         if (empty($this->session->userdata('store_cart')) || empty($this->cart->contents())) {
             redirect(base_url('cart'));
         }
         $store_cart = $this->session->userdata('store_cart');
-        
+
         $order_id = $this->uniqueId();
         $user_data = $this->getDataByUniqueId();
-   
+
         $order_data = array(
             'order_unique_id' => $order_id,
             'user_id' => $user_data['user_id'],
@@ -370,35 +368,35 @@ class Cart extends CI_Controller {
             'order_time' => date('H:i:s'),
             'tip' => $store_cart['tip'],
         );
-       
+
         $store_order_id = $this->ecommerce_model->store_order_place($order_data);
         $orderdata = $this->ecommerce_model->get_store_orderdata_by_id($store_order_id);
         $unique_order_id = $orderdata['order_unique_id'];
-        if(!empty($unique_order_id)){
+        if (!empty($unique_order_id)) {
 //            $this->session->set_flashdata('success', 'Payment made successfully.');
 //            redirect(base_url('restaurant/payment-success/'.$unique_order_id));
-            $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('cart/storeorder-detail/'.$unique_order_id)]));
+            $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('cart/storeorder-detail/' . $unique_order_id)]));
             return FALSE;
         }
     }
-   
-    public function storeorder_detail($unique_order_id){
+
+    public function storeorder_detail($unique_order_id) {
         if (empty($this->session->userdata('store_cart')) || empty($this->cart->contents())) {
             redirect(base_url('cart'));
         }
-        
-        foreach ($this->cart->contents() as $products) {
-            $productdata = $this->ecommerce_model->get_productid_by_skuid($products['id']);
-            $store_order_detail =  array(
+
+        foreach ($this->cart->contents() as $product) {
+//            $productdata = $this->ecommerce_model->get_productid_by_skuid($products['id']);
+            $store_order_detail = array(
                 'order_unique_id' => $unique_order_id,
-                'product_id' => $productdata['product_id'],
-                'price' => $products['price'],
-                'qty' => $products['qty'],
+                'product_id' => $product['id'],
+                'price' => $product['price'],
+                'qty' => $product['qty'],
             );
-            
+
             $this->ecommerce_model->storeorder_detail($store_order_detail);
         }
-        redirect((base_url('cart/success-order/'.$unique_order_id)));
+        redirect((base_url('cart/success-order/' . $unique_order_id)));
     }
 
     public function success_order($unique_order_id) {
@@ -410,8 +408,7 @@ class Cart extends CI_Controller {
         $this->session->unset_userdata('check');
         $this->cart->destroy();
         $data['title'] = 'Success Order';
-	$data['countries'] = $this->ecommerce_model->getCountry();
-        $data['cities'] = $this->getCities();
+        $data['countries'] = $this->getFilterCountry();
         $data['user_data'] = $this->getDataByUniqueId();
         $this->load->view('front/commons/header', $data);
         $this->load->view('front/cart/success-order');
