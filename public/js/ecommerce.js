@@ -161,10 +161,11 @@ var Event = function () {
                 }
                 if (out.result === 1) {
                     //alert(out.url);
+                    var error_msg=$('#otpForm').children('.formbox').children('#error_msg');
                     var message = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-                    $("#error_msg").removeClass('alert-warning alert-success').addClass('alert alert-success alert-dismissable').show();
-                    $("#error_msg").html(message + out.msg);
-                    $("#error_msg").fadeOut(2000);
+                    error_msg.removeClass('alert-warning alert-success').addClass('alert alert-success alert-dismissable').show();
+                    error_msg.html(message + out.msg);
+                    error_msg.fadeOut(2000);
                     setTimeout(function () {
                         window.location.href = out.url;
                     }, 2000);
@@ -204,6 +205,8 @@ var Event = function () {
             });
         });
     };
+    
+    
     this.imageCommonForm = function () {
         $("#image-common-form").submit(function (evt) {
             evt.preventDefault();

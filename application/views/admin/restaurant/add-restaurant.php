@@ -133,20 +133,20 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group">
-                                        <label for="driver_instuction">Driver Instuction</label>
+                                        <label for="driver_instuction">Driver instruction</label>
                                         <?php echo form_textarea(['name' => 'driver_instuction', 'id' => 'driver_instuction', 'rows' => '5', 'class' => 'form-control'], isset($restaurant['driver_instuction']) ? $restaurant['driver_instuction'] : '') ?>   
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="estimated_delivery_time">Order Fulfilment time</label>
+                                        <label for="estimated_delivery_time">Order Fulfillment time(In minutes)</label>
                                         <?php
-                                        echo form_dropdown(['name' => 'estimated_delivery_time', 'id' => 'estimated_delivery_time', 'class' => 'form-control'], $fulfilment, isset($store['estimated_delivery_time']) ? $store['estimated_delivery_time'] : '');
+                                        echo form_input(['name' => 'estimated_delivery_time', 'id' => 'estimated_delivery_time', 'class' => 'form-control'], isset($store['estimated_delivery_time']) ? $store['estimated_delivery_time'] : '');
                                         ?> 
                                     </div>
                                     <div class="form-group">
-                                        <label for="service_fee">Service Fee</label>
+                                        <label for="service_fee">Service Fee (In $)</label>
                                         <?php echo form_input(['name' => 'service_fee', 'id' => 'service_fee',  'class' => 'form-control'], isset($restaurant['service_fee']) ? $restaurant['service_fee'] : '') ?>   
                                     </div>
                                 </div>
@@ -201,7 +201,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group" id="custombox">
-                                        <label for="delivery_charge">Delivery Charge</label>
+                                        <label for="delivery_charge">Delivery Charge(In $)</label>
                                         <?php echo form_input(['type' => 'text', 'name' => 'delivery_charge', 'id' => 'delivery_charge', 'class' => 'form-control'], isset($store['delivery_charge']) ? $store['delivery_charge'] : ''); ?>   
                                     </div>
                                 </div>

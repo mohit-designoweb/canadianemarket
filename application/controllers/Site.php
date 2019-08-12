@@ -23,12 +23,12 @@ class Site extends CI_Controller {
         }
         return $list;
     }
-    
-    public function getFilterCountry(){
-        $countries=$this->ecommerce_model->getCountry();
-        $list=[''=>'Select Country'];
-        foreach($countries as $country){
-            $list[$country['country_id']]=$country['country_name'];
+
+    public function getFilterCountry() {
+        $countries = $this->ecommerce_model->getCountry();
+        $list = ['' => 'Select Country'];
+        foreach ($countries as $country) {
+            $list[$country['country_id']] = $country['country_name'];
         }
         return $list;
     }
@@ -50,38 +50,37 @@ class Site extends CI_Controller {
             return null;
         }
     }
-    
-    public function unset_cookies(){
+
+    public function unset_cookies() {
         delete_cookie('latitude');
-        delete_cookie('longitude'); 
-        delete_cookie('country_id'); 
-        delete_cookie('city_id'); 
-        delete_cookie('address'); 
+        delete_cookie('longitude');
+        delete_cookie('country_id');
+        delete_cookie('city_id');
+        delete_cookie('address');
         return 1;
     }
 
     public function index() {
         $data['user_data'] = $this->getDataByUniqueId();
         $data['countries'] = $this->getFilterCountry();
-		$data['all_cities'] = $this->ecommerce_model->getAllCities();
+        $data['all_cities'] = $this->ecommerce_model->getAllCities();
         $data['title'] = 'Home';
-		$data['map_search'] = '1';
-		$this->unset_cookies();
+        $data['map_search'] = '1';
+        $this->unset_cookies();
         $this->load->view('front/commons/header', $data);
         $this->load->view('front/index');
         $this->load->view('front/commons/footer');
     }
-	
-	public function set_city($city_id) {
+
+    public function set_city($city_id) {
         $this->output->set_content_type('application/json');
         // echo $city_id;
         // die;
-        
+
         $city = $this->ecommerce_model->getCityNameByCityId($city_id);
         $country = $this->ecommerce_model->getCountryByCityId($city_id);
-        
+
         // print_r($city);
-        
         // print_r($country);
         // die;
         $geocode_stats = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCda3VpSiUTaG60fI3sH4Ch2L1ch0Fo06A&address=" . $city['city_name'] . "&sensor=false");
@@ -106,21 +105,21 @@ class Site extends CI_Controller {
             'expire' => '36000000',
         );
         $this->input->set_cookie($long);
-        
+
         $count = array(
             'name' => 'country_id',
             'value' => $country['country_id'],
             'expire' => '36000000',
         );
         $this->input->set_cookie($count);
-        
+
         $cit = array(
             'name' => 'city_id',
             'value' => $city_id,
             'expire' => '36000000',
         );
         $this->input->set_cookie($cit);
-        
+
         $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('store')]));
         return FALSE;
     }
@@ -161,7 +160,7 @@ class Site extends CI_Controller {
         $this->output->set_content_type('application/json');
         $latitude = $this->input->post('latitude');
         $longitude = $this->input->post('longitude');
-        
+
         $cookie = array(
             'name' => 'latitude',
             'value' => $latitude,
@@ -236,10 +235,10 @@ class Site extends CI_Controller {
             }
         }
     }
-	
-	public function setAddress() {
+
+    public function setAddress() {
         $this->output->set_content_type('application/json');
-		$user_data = $this->getDataByUniqueId();
+        $user_data = $this->getDataByUniqueId();
         $address = $this->input->post('address');
         $cookie = array(
             'name' => 'address',
@@ -247,11 +246,10 @@ class Site extends CI_Controller {
             'expire' => '36000000',
         );
         $this->input->set_cookie($cookie);
-		if(!empty($user_data['user_id']))
-		{
-			$result = $this->ecommerce_model->saveUserAddress($user_data['user_id'],$address);
-		}
-        $this->output->set_output(json_encode(['result' => 1,'url'=>base_url('store')]));
+        if (!empty($user_data['user_id'])) {
+            $result = $this->ecommerce_model->saveUserAddress($user_data['user_id'], $address);
+        }
+        $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('store')]));
         return FALSE;
     }
 
@@ -298,7 +296,6 @@ class Site extends CI_Controller {
         $this->load->view('front/commons/footer');
     }
 
-    
     public function partner_with_us() {
         $data['title'] = 'Patrner with us';
         $data['user_data'] = $this->getDataByUniqueId();
@@ -337,10 +334,10 @@ class Site extends CI_Controller {
         $this->load->view('front/privacy', $data);
         $this->load->view('front/commons/footer');
     }
-	
+
     public function terms() {
         $data['user_data'] = $this->getDataByUniqueId();
-        $data['title'] = 'Terms and condition'; 
+        $data['title'] = 'Terms and condition';
         $data['content'] = $this->ecommerce_model->getTermsPageContent();
         $data['countries'] = $this->getFilterCountry();
         $this->load->view('front/commons/header', $data);
@@ -370,7 +367,6 @@ class Site extends CI_Controller {
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[partner_query.email]');
         $this->form_validation->set_rules('store_name', 'Store Name', 'required');
         $this->form_validation->set_rules('address1', 'Address', 'required');
-        $this->form_validation->set_rules('address2', 'Address', 'required');
         $this->form_validation->set_rules('city', 'City', 'required');
         $this->form_validation->set_rules('state', 'State', 'required');
         $this->form_validation->set_rules('zipcode', 'Zip Code', 'required');
@@ -410,7 +406,6 @@ class Site extends CI_Controller {
         if ($result) {
             $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('site/partner-with-us'), 'msg' => 'Registration Successfully!!']));
             $this->session->unset_userdata('partnerId');
-
             return FALSE;
         } else {
             $this->output->set_output(json_encode(['result' => -1, 'msg' => 'Enter Valid OTP']));
@@ -561,20 +556,20 @@ class Site extends CI_Controller {
         $cat_name = $this->input->post('cat');
         $type_name = $this->input->post('type');
         $location_name = $this->input->post('location');
-		$search_val = $this->input->post('search_val');
+        $search_val = $this->input->post('search_val');
         $cat_id = $this->ecommerce_model->getCategoryIdByName($cat_name);
         $type_id = $this->ecommerce_model->getTypeIdByName($type_name);
         $cat_id = $cat_id['job_category_id'];
         $type_id = $type_id['job_type_id'];
-        $data['all_jobs'] = $this->ecommerce_model->getFilteredJobs($cat_id, $type_id, $location_name,$search_val);
+        $data['all_jobs'] = $this->ecommerce_model->getFilteredJobs($cat_id, $type_id, $location_name, $search_val);
         $content_wrapper = $this->load->view('front/jobListingl-wrapper', $data, true);
         $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
         return FALSE;
     }
 
-    public function getFilteredJobs($cat_id, $type_id, $location_name,$search_val=NULL) {
+    public function getFilteredJobs($cat_id, $type_id, $location_name, $search_val = NULL) {
         $this->output->set_content_type('application/json');
-        $data['all_jobs'] = $this->ecommerce_model->getFilteredJobs($cat_id, $type_id, $location_name,$search_val=NULL);
+        $data['all_jobs'] = $this->ecommerce_model->getFilteredJobs($cat_id, $type_id, $location_name, $search_val = NULL);
         $content_wrapper = $this->load->view('front/jobListingl-wrapper', $data, true);
         $this->output->set_output(json_encode(['result' => 1, 'content_wrapper' => $content_wrapper]));
         return FALSE;
@@ -589,8 +584,8 @@ class Site extends CI_Controller {
             return true;
         }
     }
-    
-	public function gift_card() {
+
+    public function gift_card() {
         $data['title'] = 'Gift Card';
         $data['user_data'] = $this->getDataByUniqueId();
         $data['countries'] = $this->getFilterCountry();
@@ -600,7 +595,6 @@ class Site extends CI_Controller {
         $this->load->view('front/commons/footer');
     }
 
-	
     public function giftCard() {
         $this->output->set_content_type('application/json');
         $this->form_validation->set_rules('receiver_name', 'Receiver Name', 'required');
@@ -612,72 +606,71 @@ class Site extends CI_Controller {
             $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array(), 'url' => base_url('site/gift-card')]));
             return FALSE;
         }
-        
-        $gift_detail = $this->input->post(['receiver_name', 'unique_id', 'gifter_name', 'gift_amount','address_type', 'receiver_address','emailid','message']);
+
+        $gift_detail = $this->input->post(['receiver_name', 'unique_id', 'gifter_name', 'gift_amount', 'address_type', 'receiver_address', 'emailid', 'message']);
         $this->session->set_userdata('gift_detail', $gift_detail);
         $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('site/payment')]));
         return FALSE;
     }
-     
-	public function payment() {
-        $data['title'] =  "Payment";
+
+    public function payment() {
+        $data['title'] = "Payment";
         $data['user_data'] = $this->getDataByUniqueId();
         $this->load->view('front/commons/header', $data);
         $this->load->view('front/payment');
         $this->load->view('front/commons/footer');
     }
-	
-    public function stripe_payment(){
+
+    public function stripe_payment() {
         $gift_detail = $this->session->userdata('gift_detail');
         require_once('application/libraries/stripe-php/init.php');
-    
+
         \Stripe\Stripe::setApiKey($this->config->item('stripe_secret'));
-     
-        $charge = \Stripe\Charge::create ([
-                "amount" => $gift_detail['gift_amount'],
-                "currency" => "usd",
-                "source" => $this->input->post('stripeToken'),
-                "description" => "Test payment for Gift Card" 
+
+        $charge = \Stripe\Charge::create([
+                    "amount" => $gift_detail['gift_amount'],
+                    "currency" => "usd",
+                    "source" => $this->input->post('stripeToken'),
+                    "description" => "Test payment for Gift Card"
         ]);
         $chargeJson = $charge->jsonSerialize();
         /*  for insert data in database start */
-         $item_name       = "Premium Script Webpreparations";
-         $item_number     = "PS123456";
-         $item_price      = $gift_detail['gift_amount'];
-         $currency        = "usd";
-         $order_id        = $this->uniqueId();
+        $item_name = "Premium Script Webpreparations";
+        $item_number = "PS123456";
+        $item_price = $gift_detail['gift_amount'];
+        $currency = "usd";
+        $order_id = $this->uniqueId();
 
-         $amount                  = $chargeJson['amount'];
-         $txn_id                  = $chargeJson['balance_transaction'];
-         $currency                = $chargeJson['currency'];
-         $status                  = $chargeJson['status'];
-         
-         $result = $this->ecommerce_model->insertIntoGiftcard($gift_detail);       
-         
-         $insert_data = array(
-                    
-                    'card_num'              => $this->input->post('card_number'),
-                    'card_cvc'              => $this->input->post('card_code'),
-                    'card_exp_month'        => $this->input->post('month'),
-                    'card_exp_year'         => $this->input->post('year'),
-                    'item_name'             => $item_name,
-                    'item_number'           => $item_number,
-                    'item_price'            => $item_price,
-                    'item_price_currency'   => $currency,
-                    'paid_amount'           => $amount,
-                    'paid_amount_currency'  => $currency,
-                    'payment_status'        => $status,
-                    'created_by'            => 1,
-                    'created_date'          => date('Y-m-d H:i:s'),
-                    'txn_id'                => $txn_id,
-                    'gift_card_id'          =>$result
-                     );
-        
-            
-            $result = $this->ecommerce_model->insert($insert_data);
-            
-              /*  for insert data in database close */
-        $this->session->set_userdata('payment_id',$result); 
+        $amount = $chargeJson['amount'];
+        $txn_id = $chargeJson['balance_transaction'];
+        $currency = $chargeJson['currency'];
+        $status = $chargeJson['status'];
+
+        $result = $this->ecommerce_model->insertIntoGiftcard($gift_detail);
+
+        $insert_data = array(
+            'card_num' => $this->input->post('card_number'),
+            'card_cvc' => $this->input->post('card_code'),
+            'card_exp_month' => $this->input->post('month'),
+            'card_exp_year' => $this->input->post('year'),
+            'item_name' => $item_name,
+            'item_number' => $item_number,
+            'item_price' => $item_price,
+            'item_price_currency' => $currency,
+            'paid_amount' => $amount,
+            'paid_amount_currency' => $currency,
+            'payment_status' => $status,
+            'created_by' => 1,
+            'created_date' => date('Y-m-d H:i:s'),
+            'txn_id' => $txn_id,
+            'gift_card_id' => $result
+        );
+
+
+        $result = $this->ecommerce_model->insert($insert_data);
+
+        /*  for insert data in database close */
+        $this->session->set_userdata('payment_id', $result);
         $this->session->set_flashdata('success', 'Payment made successfully.');
         redirect(base_url('site/confirm-order'));
     }
@@ -688,11 +681,11 @@ class Site extends CI_Controller {
         $this->load->view('front/confirm-order');
         $this->load->view('front/commons/footer');
     }
-	
-	public function subscription(){
+
+    public function subscription() {
         $this->output->set_content_type('application/json');
         $this->form_validation->set_rules('postdata', 'Email', 'required|valid_email|is_unique[`user_subscribe.user_email]');
-    
+
         if ($this->form_validation->run() == FALSE) {
             $this->output->set_output(json_encode(['result' => 0, 'errors' => $this->form_validation->error_array()]));
             return FALSE;
@@ -705,39 +698,38 @@ class Site extends CI_Controller {
             $this->output->set_output(json_encode(['result' => -1, 'msg' => 'Error In Subscribing']));
             return FALSE;
         }
-        
     }
-    
-    public function do_search_data(){
+
+    public function do_search_data() {
         $this->output->set_content_type('application/json');
         $list = array();
         $restaurantdatas = $this->ecommerce_model->do_search_restaurantdata($this->input->post('postdata'));
         $productdatas = $this->ecommerce_model->do_search_productdata($this->input->post('postdata'));
-        $i=0;
-        foreach($restaurantdatas as $restaurantdata){
-            $list[$i]['category_name']=$restaurantdata['category_name'];
-            $list[$i]['restaurant_id']=$restaurantdata['restaurant_id'];
-            $list[$i]['restaurant_name']=$restaurantdata['restaurant_name'];
-            $list[$i]['address']=$restaurantdata['address'];
-            $list[$i]['opening_time_from']=$restaurantdata['opening_time_from'];
-            $list[$i]['opening_time_to']=$restaurantdata['opening_time_to'];
+        $i = 0;
+        foreach ($restaurantdatas as $restaurantdata) {
+            $list[$i]['category_name'] = $restaurantdata['category_name'];
+            $list[$i]['restaurant_id'] = $restaurantdata['restaurant_id'];
+            $list[$i]['restaurant_name'] = $restaurantdata['restaurant_name'];
+            $list[$i]['address'] = $restaurantdata['address'];
+            $list[$i]['opening_time_from'] = $restaurantdata['opening_time_from'];
+            $list[$i]['opening_time_to'] = $restaurantdata['opening_time_to'];
             $i++;
         }
-        foreach($productdatas as $productdata){
-            $list[$i]['store_name']=$productdata['store_name'];
-            $list[$i]['address']=$productdata['address'];
-            $list[$i]['opening_time_from']=$productdata['opening_time_from'];
-            $list[$i]['opening_time_to']=$productdata['opening_time_to'];
-            $list[$i]['product_id']=$productdata['product_id'];
-            $list[$i]['product_name']=$productdata['product_name'];
-            $list[$i]['image_url']=$productdata['image_url'];
-            $list[$i]['price']=$productdata['price'];
-            $list[$i]['discount']=$productdata['discount'];
+        foreach ($productdatas as $productdata) {
+            $list[$i]['store_name'] = $productdata['store_name'];
+            $list[$i]['address'] = $productdata['address'];
+            $list[$i]['opening_time_from'] = $productdata['opening_time_from'];
+            $list[$i]['opening_time_to'] = $productdata['opening_time_to'];
+            $list[$i]['product_id'] = $productdata['product_id'];
+            $list[$i]['product_name'] = $productdata['product_name'];
+            $list[$i]['image_url'] = $productdata['image_url'];
+            $list[$i]['price'] = $productdata['price'];
+            $list[$i]['discount'] = $productdata['discount'];
             $i++;
         }
         $data['lists'] = $list;
         if (!empty($data['lists'])) {
-            $search_wrapper = $this->load->view('front/search-wrapper',$data, true);
+            $search_wrapper = $this->load->view('front/search-wrapper', $data, true);
             $this->output->set_output(json_encode(['result' => 1, 'search_wrapper' => $search_wrapper]));
             return FALSE;
         } else {
@@ -745,5 +737,5 @@ class Site extends CI_Controller {
             return FALSE;
         }
     }
-	
+
 }

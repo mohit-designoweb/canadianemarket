@@ -132,7 +132,7 @@ class Admin extends CI_Controller {
             $image_url = $user['image_url'];
         }
 
-        $result = $this->admin_model->doUpdateProfile('admin', $email, $image_url);
+        $result = $this->admin_model->doUpdateProfile('admin', $email, $image_url,'');
         if ($result) {
             $this->output->set_output(json_encode(['result' => 1, 'url' => base_url('admin/profile'), 'msg' => 'Profile Updated Succesfully!!']));
             return FALSE;

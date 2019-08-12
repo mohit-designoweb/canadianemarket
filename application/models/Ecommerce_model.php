@@ -379,7 +379,6 @@ class Ecommerce_model extends CI_Model {
         $this->db->select('rc.category_name,r.image_url,r.restaurant_name,r.address,r.latitude,r.longitude,r.opening_time_from,r.opening_time_to,r.delivery_time,r.is_open');
         $this->db->from('restaurant r');
         $this->db->join('restaurant_category rc', 'r.restaurant_category_id=rc.restaurant_category_id');
-
         $this->db->join('partner p', 'r.partner_id=p.partner_id');
         $this->db->where('r.is_active', 'Active');
         $this->db->where('r.delivery_charge', 0);
@@ -1375,6 +1374,25 @@ class Ecommerce_model extends CI_Model {
         $this->db->insert('restaurant_wishlist', $data);
         return 1;
     }
+     public function checkRestaurantMenuWishlist($menu_id, $userid) {
+        $check_query = $this->db->get_where('store_product_wishlist', ['user_id' => $userid, 'menu_id' => $menu_id]);
+        if ($check_query->num_rows() >= 1) {
+            $this->db->delete('store_product_wishlist', ['user_id' => $userid, 'menu_id' => $menu_id]);
+            return $this->db->affected_rows();
+        }
+    }
+
+    public function addRestaurantMenuWishlist($menu_id, $userid) {
+
+        $data = array(
+            'user_id' => $userid,
+            'menu_id' => $menu_id,
+            'date' => date('Y-m-d H:i:s A')
+        );
+        $this->db->insert('store_product_wishlist', $data);
+        return 1;
+    }
+
 
     public function getStoreProductWishlist($product_id, $user_id) {
 
@@ -1542,7 +1560,9 @@ class Ecommerce_model extends CI_Model {
     }
     
     public function get_productid_by_skuid($sku){
-        $query = $this->db->get_where('product_sku', ['sku'=>$sku]);
+        $query = $this->db->get_where('product', ['sku'=>$sku]);
+        echo $this->db->last_query();
+        die;
         return $query->row_array();
     }
 }
