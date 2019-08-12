@@ -1,5 +1,15 @@
 <?php
 //print_r($menu_wishlist_item); die;
+//if(!empty($menu_wishlist_item)){
+//    $wishlist = [];
+//    $i = 0;
+//foreach ($menu_wishlist_item as $menu_wishlist)
+//{
+//    $wishlist[$i] = $menu_wishlist;
+//    $i++;
+//}
+//print_r($wishlist); die;
+//}
 $carts = $this->cart->contents();
 foreach ($menus as $menu) {
     ?>
@@ -7,9 +17,16 @@ foreach ($menus as $menu) {
         <form method="post" action="<?php echo base_url('restaurant/addToCartMenu'); ?>" class="add-to-cart">
             <div class="item_img">  
                 <?php if(!empty($user_data)){
-                    if(in_array($menu['menu_id'],$menu_wishlist_item))?>
+                    if(in_array($menu['menu_id'],array_column($menu_wishlist_item, 'menu_id'))){?>
                 <a href="<?php echo base_url('restaurant/restaurantMenuWishlist/'.$menu['menu_id']."/".$user_data['user_id']);?>" class="menu-wishlist"> <i class="fa fa-heart hrt_img wishlist-color "></i></a>
-                <?php }?>
+                    <?php } else
+                    {?>
+                <a href="<?php echo base_url('restaurant/restaurantMenuWishlist/'.$menu['menu_id']."/".$user_data['user_id']);?>" class="menu-wishlist"> <i class="fa fa-heart hrt_img  "></i></a>
+                        <?php }} else {?>
+                <a href="javscript:void(0)" data-toggle="modal" data-target="#login" class="menu-wishlist" >
+                   <i class="fa fa-heart hrt_img"></i>
+                </a>
+                        <?php }?>
                 <img src="<?php echo base_url('uploads/menu/' . $menu['image_url']); ?>" alt="itemimg" class="img-responsive">
             </div>
             <div class="item_details itemDet">

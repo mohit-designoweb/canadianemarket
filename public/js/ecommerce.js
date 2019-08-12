@@ -1264,6 +1264,7 @@ var Event = function () {
             var url = $(this).attr('href');
             $.post(url,'',function(out){
                 alert(out.msg);
+                location.reload();
             });
         });
     };
